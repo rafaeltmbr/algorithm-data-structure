@@ -8,31 +8,33 @@
  * Mastering Algorithms with C - Kyle Loudon.
  */
 
-struct ListElement {
+class ListElement {
+public:
+    ListElement(): data{nullptr}, next{nullptr} {}
+    ListElement(void* d): data{d}, next{nullptr} {}
     void* data;
     ListElement* next;
 };
 
 class SinglyLinked {
-    int size = 0;
-    ListElement* head = nullptr;
-    ListElement* tail = nullptr;
-    void (*destroyData)(void* data);
+    int size;
+    ListElement *head, *tail;
+    void (*destroyData)(void *data);
 
 public:
     SinglyLinked();
-    SinglyLinked(void (*destroy)(void* data));
+    SinglyLinked(void (*destroy)(void *data));
     ~SinglyLinked();
     void destroy(void);
-    void insertNext(ListElement& element, void const* data);
-    void removeNext(ListElement& element, void** data);
+    void insertNext(ListElement *element, void *data);
+    void removeNext(ListElement *element, void **data);
     int getSize(void);
-    ListElement& getHead(void);
-    ListElement& getTail(void);
-    bool isHead(const ListElement& element);
-    bool isTail(const ListElement& element);
-    void* getData(const ListElement& element);
-    void* getNext(const ListElement& element);
+    ListElement* getHead(void);
+    ListElement* getTail(void);
+    bool isHead(const ListElement *element);
+    bool isTail(const ListElement *element);
+    void* getData(ListElement *element);
+    ListElement* getNext(const ListElement *element);
 };
 
 #endif // SINGLY_LINKED_LIST
