@@ -29,14 +29,17 @@ int main()
     list.insertNext(nullptr, d);
     list.insertNext(nullptr, s);
 
-    list.removeNext(nullptr, (void**) &ix);
-    list.removeNext(nullptr, (void**) &dx);
+    cout << "list length after insertions: " << list.getSize() << "\n\n";
+
     list.removeNext(nullptr, (void**) &sx);
+    list.removeNext(nullptr, (void**) &dx);
+    list.removeNext(nullptr, (void**) &ix);
 
     cout << "ix: " << *ix
          << "\ndx: " << *dx
-         << "\nsx: " << *sx
-         << "\nlist length: " << list.getSize() << endl;
+         << "\nsx: " << *sx << "\n\n";
+
+    cout << "list length after removes: " << list.getSize() << endl;
 
     delete i;
     delete ix;

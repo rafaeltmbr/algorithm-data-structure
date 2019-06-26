@@ -63,11 +63,23 @@ void SinglyLinked::insertNext(ListElement *element, void  *data)
 void SinglyLinked::removeNext(ListElement *element, void **data)
 {
     ListElement *le = head;
-    int i;
-    for (i=0; i < size && le != element; i++)
-        le = le->next;
-    *data = i < size ? le->data : nullptr;
-    size--;
+
+    if (size <= 0)
+        return;
+
+    if ( !element ) {
+        *data = head->data;
+        le = head->next;
+        delete head;
+        head = le;
+        size--;
+    } else {
+        int i;
+        for (i=0; i < size && le != element; i++)
+            le = le->next;
+        *data = i < size ? le->data : nullptr;
+        size--;
+    }
 }
 
 int SinglyLinked::getSize(void)
