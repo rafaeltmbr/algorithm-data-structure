@@ -16,35 +16,28 @@ using std::string;
 
 int main()
 {
-    int *i = new int, *ix = new int;
-    double *d = new double, *dx = new double;
-    string *s = new string, *sx = new string;
+    int i, *iptr;
+    double d, *dptr;
+    string s, *sptr;
 
-    *i = 32;
-    *d = 3.141592654;
-    *s = "Okay";
+    i = 32;
+    d = 3.141592654;
+    s = "Okay";
 
     SinglyLinked list;
-    list.insertNext(nullptr, i);
-    list.insertNext(nullptr, d);
-    list.insertNext(nullptr, s);
+    list.insertNext(nullptr, &i);
+    list.insertNext(nullptr, &d);
+    list.insertNext(nullptr, &s);
 
     cout << "list length after insertions: " << list.getSize() << "\n\n";
 
-    list.removeNext(nullptr, (void**) &sx);
-    list.removeNext(nullptr, (void**) &dx);
-    list.removeNext(nullptr, (void**) &ix);
+    list.removeNext(nullptr, (void**) &sptr);
+    list.removeNext(nullptr, (void**) &dptr);
+    list.removeNext(nullptr, (void**) &iptr);
 
-    cout << "ix: " << *ix
-         << "\ndx: " << *dx
-         << "\nsx: " << *sx << "\n\n";
+    cout << "ix: " << *iptr
+         << "\ndx: " << *dptr
+         << "\nsx: " << *sptr << "\n\n";
 
     cout << "list length after removes: " << list.getSize() << endl;
-
-    delete i;
-    delete ix;
-    delete d;
-    delete dx;
-    delete s;
-    delete sx;
 }
