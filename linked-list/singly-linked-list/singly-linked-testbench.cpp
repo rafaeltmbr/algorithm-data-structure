@@ -7,37 +7,70 @@
  * </em>
  */
 
-#include "singly-linked.hpp"
-#include <iostream>
+#define ASSERT(cond, msg) { \
+    if ( !(cond) ) { \
+        std::cout << "Test failed (" << __LINE__ << "): " << msg << std::endl; \
+        exit(EXIT_FAILURE); \
+    } \
+}
 
-using std::cout;
-using std::endl;
-using std::string;
+#include "singly-linked.hpp"
+#include <iostream> // cout, endl
+#include <cstdlib>  // exit()
+
+using namespace std;
+SinglyLinked list;
+
+void testInsertRemove(void);
+void testDestruction(void);
+void testGetIs(void);
 
 int main()
 {
-    int i, *iptr;
-    double d, *dptr;
-    string s, *sptr;
+    testInsertRemove();
+    testDestruction();
+    testGetIs();
+}
 
-    i = 32;
-    d = 3.141592654;
-    s = "Okay";
+void testInsertRemove(void)
+{
+    int i = 32, *iptr;
+    double d = 3.1416, *dptr;
+    string s = "Okay", *sptr;
 
-    SinglyLinked list;
     list.insertNext(nullptr, &i);
     list.insertNext(nullptr, &d);
     list.insertNext(nullptr, &s);
-
-    cout << "list length after insertions: " << list.getSize() << "\n\n";
+    ASSERT(list.getSize() == 3, "List can't insert all elements.");
 
     list.removeNext(nullptr, (void**) &sptr);
     list.removeNext(nullptr, (void**) &dptr);
     list.removeNext(nullptr, (void**) &iptr);
+    ASSERT(&i == iptr, "Returned object mismatch.");
+    ASSERT(&d == dptr, "Returned object mismatch.");
+    ASSERT(&s == sptr, "Returned object mismatch.");
+    ASSERT(list.getSize() == 0, "List can't free all elements.");
 
-    cout << "ix: " << *iptr
-         << "\ndx: " << *dptr
-         << "\nsx: " << *sptr << "\n\n";
+    cout << "Insert and Remove test PASSED" << endl;
+}
 
-    cout << "list length after removes: " << list.getSize() << endl;
+#define DESTRUCTION_TIMES 10
+
+void testDestruction(void)
+{
+    int array[DESTRUCTION_TIMES];
+
+    for (int i=0; i < DESTRUCTION_TIMES; i++)
+        list.insertNext(nullptr, array + i);
+    ASSERT(list.getSize() == DESTRUCTION_TIMES, "Size mismatch.");
+
+    list.destroy();
+    ASSERT(list.getSize() == 0, "list can't be freed.");
+
+    cout << "Destruction Test PASSED" << endl;
+}
+
+void testGetIs(void)
+{
+    
 }

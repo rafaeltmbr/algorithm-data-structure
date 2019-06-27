@@ -9,8 +9,8 @@
 SinglyLinked::SinglyLinked()
 {
     size = 0;
-    head = new ListElement(nullptr);
-    tail = head;
+    head = nullptr;
+    tail = nullptr;
     destroyData = nullptr;
 }
 
@@ -21,7 +21,11 @@ SinglyLinked::SinglyLinked(void (*destroy)(void *data)) : SinglyLinked::SinglyLi
 
 SinglyLinked::~SinglyLinked()
 {
+    if (size <= 0)
+        return;
+
     ListElement *le = head, *nx;
+
     while (le->next) {
         nx = le->next;
         delete le;
@@ -31,20 +35,35 @@ SinglyLinked::~SinglyLinked()
 
 void SinglyLinked::destroy(void)
 {
+    if (size <= 0 )
+        return;
+
     ListElement *le = head, *nx;
-    while (le->next) {
-        destroyData(le->data);
-        nx = le->next;
-        delete le;
-        le = nx;
+
+    if (destroyData) {
+        for (; size > 0; size--) {
+            destroyData(le->data);
+            nx = le->next;
+            delete le;
+            le = nx;
+        }
+    } else {
+        for (; size > 0; size--) {
+            nx = le->next;
+            delete le;
+            le = nx;
+        }
     }
 }
 
 void SinglyLinked::insertNext(ListElement *element, void  *data)
 {
     ListElement *temp;
-    
-    if ( !element ) {
+
+    if (size == 0) {
+        head = new ListElement(data);
+        tail = head;
+    } else if ( !element ) {
         temp = head;
         head = new ListElement(data);
         head->next = temp;
@@ -56,30 +75,28 @@ void SinglyLinked::insertNext(ListElement *element, void  *data)
         if (!element->next->next)
             tail = element->next;
     }
-
     size++;
 }
 
 void SinglyLinked::removeNext(ListElement *element, void **data)
 {
-    ListElement *le = head;
-
     if (size <= 0)
         return;
+
+    ListElement *le = head;
 
     if ( !element ) {
         *data = head->data;
         le = head->next;
         delete head;
         head = le;
-        size--;
     } else {
         int i;
         for (i=0; i < size && le != element; i++)
             le = le->next;
         *data = i < size ? le->data : nullptr;
-        size--;
     }
+    size--;
 }
 
 int SinglyLinked::getSize(void)
