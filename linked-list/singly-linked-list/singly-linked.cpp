@@ -6,18 +6,14 @@
 
 #include "singly-linked.hpp"
 
-SinglyLinked::SinglyLinked()
-{
-    size = 0;
-    head = nullptr;
-    tail = nullptr;
-    destroyData = nullptr;
-}
+SinglyLinked::SinglyLinked(): SinglyLinked(nullptr) {}
 
-SinglyLinked::SinglyLinked(void (*destroy)(void *data)) : SinglyLinked::SinglyLinked()
-{
-    destroyData = destroy;
-}
+SinglyLinked::SinglyLinked(destroy_t destroy)
+    : size{0}
+    , head{nullptr}
+    , tail{nullptr}
+    , destroyData{destroy}
+{}
 
 SinglyLinked::~SinglyLinked()
 {
@@ -35,7 +31,7 @@ SinglyLinked::~SinglyLinked()
 
 void SinglyLinked::destroy(void)
 {
-    if (size <= 0 )
+    if (size <= 0)
         return;
 
     ListElement *le = head, *nx;
@@ -56,14 +52,14 @@ void SinglyLinked::destroy(void)
     }
 }
 
-void SinglyLinked::insertNext(ListElement *element, void  *data)
+int SinglyLinked::insertNext(ListElement* element, void* data)
 {
-    ListElement *temp;
+    ListElement* temp;
 
     if (size == 0) {
         head = new ListElement(data);
         tail = head;
-    } else if ( !element ) {
+    } else if (!element) {
         temp = head;
         head = new ListElement(data);
         head->next = temp;
@@ -76,27 +72,29 @@ void SinglyLinked::insertNext(ListElement *element, void  *data)
             tail = element->next;
     }
     size++;
+    return LIST_SUCCESS;
 }
 
-void SinglyLinked::removeNext(ListElement *element, void **data)
+int SinglyLinked::removeNext(ListElement* element, void** data)
 {
     if (size <= 0)
-        return;
+        return LIST_FAILURE;
 
-    ListElement *le = head;
+    ListElement* le = head;
 
-    if ( !element ) {
+    if (!element) {
         *data = head->data;
         le = head->next;
         delete head;
         head = le;
     } else {
         int i;
-        for (i=0; i < size && le != element; i++)
+        for (i = 0; i < size && le != element; i++)
             le = le->next;
         *data = i < size ? le->data : nullptr;
     }
     size--;
+    return LIST_SUCCESS;
 }
 
 int SinglyLinked::getSize(void)
@@ -114,25 +112,25 @@ ListElement* SinglyLinked::getTail(void)
     return tail;
 }
 
-bool SinglyLinked::isHead(const ListElement *element)
+bool SinglyLinked::isHead(const ListElement* element)
 {
     return element == head;
 }
 
-bool SinglyLinked::isTail(const ListElement *element)
+bool SinglyLinked::isTail(const ListElement* element)
 {
     return element == tail;
 }
 
-void* SinglyLinked::getData(ListElement *element)
+void* SinglyLinked::getData(ListElement* element)
 {
     return element->data;
 }
 
-ListElement* SinglyLinked::getNext(const ListElement *element)
+ListElement* SinglyLinked::getNext(const ListElement* element)
 {
-    ListElement *le = head;
-    for (int i=0; i < size; i++) {
+    ListElement* le = head;
+    for (int i = 0; i < size; i++) {
         if (element == le)
             return le->next;
     }
