@@ -24,7 +24,7 @@ class SinglyLinked {
     int size;
     ListElement *head, *tail;
     destroy_t destroyData;
-
+    void* deleteHead(void);
 public:
     SinglyLinked();
     SinglyLinked(destroy_t destroy);
@@ -32,13 +32,13 @@ public:
     void destroy(void);
     int insertNext(ListElement *element, void *data);
     int removeNext(ListElement *element, void **data);
-    int getSize(void);
-    ListElement* getHead(void);
-    ListElement* getTail(void);
-    bool isHead(const ListElement *element);
-    bool isTail(const ListElement *element);
-    void* getData(ListElement *element);
-    ListElement* getNext(const ListElement *element);
+    int getSize(void) { return size; };
+    ListElement* getHead(void) { return head; };
+    ListElement* getTail(void) { return tail; };
+    bool isHead(const ListElement *element) { return head == element; };
+    bool isTail(const ListElement *element) { return tail == element; };
+    void* getData(ListElement *element) { return element->data; };
+    ListElement* getNext(const ListElement *element) { return element->next; };
 };
 
 #endif // SINGLY_LINKED_LIST
