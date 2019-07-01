@@ -23,13 +23,13 @@ SinglyLinked list;
 
 void testInsertRemove(void);
 void testDestruction(void);
-void testGetIs(void);
+void testElementCheck(void);
 
 int main()
 {
     testInsertRemove();
     testDestruction();
-    testGetIs();
+    testElementCheck();
 }
 
 void testInsertRemove(void)
@@ -70,7 +70,23 @@ void testDestruction(void)
     cout << "Destruction Test PASSED" << endl;
 }
 
-void testGetIs(void)
+void testElementCheck(void)
 {
+    int a[] = {10, 20, 30};
+
+    list.insertNext(nullptr, a);
+    list.insertNext(nullptr, a+1);
+    list.insertNext(nullptr, a+2);
+
+    ASSERT( list.getHead()->getData() == a, "getHead() Failed.");
+    ASSERT( list.getTail()->getData() == a+2, "getTail() Failed.");
+    ASSERT( list.getHead()->getNext().getData() == a+1,
+        "getNext() Failed.");
+
+    ASSERT( list.isHead(list.getHead()), "isHead() Failed." );
+    ASSERT( list.isTail(list.getTail()), "isHead() Failed." );
+
+    ASSERT( list.getSize() == 3, "getSize() Failed.");
     
+    cout << "Element Check Test PASSED" << endl;
 }

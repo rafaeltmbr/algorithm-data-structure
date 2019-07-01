@@ -13,9 +13,12 @@
 
 class ListElement {
 public:
-    ListElement(void *d = nullptr, ListElement *n = nullptr): data{d}, next{n} {}
     void* data;
     ListElement* next;
+
+    ListElement(void *d = nullptr, ListElement *n = nullptr): data{d}, next{n} {}
+    void* getData(void) { return data; }
+    ListElement& getNext(void) { return *next; }
 };
 
 typedef void (*destroy_t) (void *data);
@@ -30,15 +33,14 @@ public:
     SinglyLinked(destroy_t destroy);
     ~SinglyLinked();
     void destroy(void);
+    void setDestroy(destroy_t destroy) { destroyData = destroy; }
     int insertNext(ListElement *element, void *data);
     int removeNext(ListElement *element, void **data);
-    int getSize(void) { return size; };
-    ListElement* getHead(void) { return head; };
-    ListElement* getTail(void) { return tail; };
-    bool isHead(const ListElement *element) { return head == element; };
-    bool isTail(const ListElement *element) { return tail == element; };
-    void* getData(ListElement *element) { return element->data; };
-    ListElement* getNext(const ListElement *element) { return element->next; };
+    int getSize(void) { return size; }
+    ListElement* getHead(void) { return head; }
+    ListElement* getTail(void) { return tail; }
+    bool isHead(const ListElement *element) { return head == element; }
+    bool isTail(const ListElement *element) { return tail == element; }
 };
 
 #endif // SINGLY_LINKED_LIST

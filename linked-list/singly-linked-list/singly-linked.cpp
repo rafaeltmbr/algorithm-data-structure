@@ -17,7 +17,6 @@ SinglyLinked::SinglyLinked(destroy_t destroy)
 
 SinglyLinked::~SinglyLinked()
 {
-    destroyData = nullptr;
     destroy();
 }
 
@@ -52,7 +51,7 @@ int SinglyLinked::insertNext(ListElement *element, void *data)
         newElement->next = head;
         head = newElement;
     } else {
-        newElement = element->next;
+        newElement->next = element->next;
         element->next = newElement;
     }
 
