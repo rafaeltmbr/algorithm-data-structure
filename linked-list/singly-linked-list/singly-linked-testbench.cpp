@@ -78,8 +78,8 @@ void testElementCheck(void)
     list.insertNext(nullptr, a+1);
     list.insertNext(nullptr, a+2);
 
-    ASSERT( list.getHead()->getData() == a, "getHead() Failed.");
-    ASSERT( list.getTail()->getData() == a+2, "getTail() Failed.");
+    ASSERT( list.getHead()->getData() == a+2, "getHead() Failed.");
+    ASSERT( list.getTail()->getData() == a, "getTail() Failed.");
     ASSERT( list.getHead()->getNext().getData() == a+1,
         "getNext() Failed.");
 
