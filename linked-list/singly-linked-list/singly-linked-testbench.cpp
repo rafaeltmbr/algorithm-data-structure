@@ -2,7 +2,7 @@
  * Doxygen comments
  * @page
  * Singly Linked List testbench.
- * <em> Build commands: 
+ * <em> Build commands:
  *   g++ singly-linked-testbench.cpp singly-linked.cpp -g -std=c++14 -Wall -o singly-linked.exe
  * </em>
  */
@@ -24,12 +24,14 @@ SinglyLinked list;
 void testInsertRemove(void);
 void testDestruction(void);
 void testElementCheck(void);
+void testDestroyElement(void);
 
 int main()
 {
     testInsertRemove();
     testDestruction();
     testElementCheck();
+    testDestroyElement();
 }
 
 void testInsertRemove(void)
@@ -86,6 +88,26 @@ void testElementCheck(void)
     ASSERT( list.isTail(list.getTail()), "isHead() Failed." );
 
     ASSERT( list.getSize() == 3, "getSize() Failed.");
-    
+
+    list.destroy();
     cout << "Element Check Test PASSED" << endl;
+}
+
+void destroyInt(void *data)
+{
+    delete (int*) data;
+}
+
+void testDestroyElement(void)
+{
+    int *iptr = new int(10);
+    list.setDestroy(destroyInt).insertNext(nullptr, iptr).destroy().setDestroy(nullptr);
+
+    try {
+        delete iptr;
+    } catch (...) {
+        cout << "Destroy Element Test PASSED" << endl;
+    }
+
+    cout << "Destroy Element Test FAILED" << endl;
 }

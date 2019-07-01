@@ -21,7 +21,7 @@ SinglyLinked::~SinglyLinked()
 }
 
 void* SinglyLinked::deleteHead(void)
-{    
+{
     void *data = head->data;
     ListElement *deleted = head;
     head = head->next;
@@ -31,7 +31,7 @@ void* SinglyLinked::deleteHead(void)
     return data;
 }
 
-void SinglyLinked::destroy(void)
+SinglyLinked& SinglyLinked::destroy(void)
 {
     if (destroyData)
         while(head) {
@@ -41,9 +41,17 @@ void SinglyLinked::destroy(void)
     else
         while(head)
             deleteHead();
+
+    return *this;
 }
 
-int SinglyLinked::insertNext(ListElement *element, void *data)
+SinglyLinked& SinglyLinked::setDestroy(destroy_t destroy)
+{
+    destroyData = destroy;
+    return *this;
+}
+
+SinglyLinked& SinglyLinked::insertNext(ListElement *element, void *data)
 {
     ListElement* newElement = new ListElement(data);
 
@@ -55,21 +63,23 @@ int SinglyLinked::insertNext(ListElement *element, void *data)
         element->next = newElement;
     }
 
+    if (size == 0)
+        newElement->next = nullptr;
+
     if (newElement->next == nullptr)
         tail = newElement;
 
     size++;
-    return LIST_SUCCESS;
+    return *this;
 }
 
-int SinglyLinked::removeNext(ListElement *element, void **data)
+SinglyLinked& SinglyLinked::removeNext(ListElement *element, void **data)
 {
-    if (size <= 0)
-        return LIST_FAILURE;
-
     ListElement* removedElement;
 
-    if (element == nullptr)
+    if (size <= 0)
+        *data = nullptr;
+    else if (element == nullptr)
         *data = deleteHead();
     else {
         removedElement = element->next;
@@ -81,6 +91,6 @@ int SinglyLinked::removeNext(ListElement *element, void **data)
         if (element->next == nullptr)
             tail = element;
     }
-
-    return LIST_SUCCESS;
+    
+    return *this;
 }

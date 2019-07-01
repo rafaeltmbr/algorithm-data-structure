@@ -32,10 +32,10 @@ public:
     SinglyLinked();
     SinglyLinked(destroy_t destroy);
     ~SinglyLinked();
-    void destroy(void);
-    void setDestroy(destroy_t destroy) { destroyData = destroy; }
-    int insertNext(ListElement *element, void *data);
-    int removeNext(ListElement *element, void **data);
+    SinglyLinked& destroy(void);
+    SinglyLinked& setDestroy(destroy_t destroy);
+    SinglyLinked& insertNext(ListElement *element, void *data);
+    SinglyLinked& removeNext(ListElement *element, void **data);
     int getSize(void) { return size; }
     ListElement* getHead(void) { return head; }
     ListElement* getTail(void) { return tail; }
