@@ -95,7 +95,8 @@ void testElementCheck(void)
 
 void destroyInt(void *data)
 {
-    delete (int*) data;
+    int *iptr = (int*) data;
+    *iptr = 20;
 }
 
 void testDestroyElement(void)
@@ -103,11 +104,6 @@ void testDestroyElement(void)
     int *iptr = new int(10);
     list.setDestroy(destroyInt).insertNext(nullptr, iptr).destroy().setDestroy(nullptr);
 
-    try {
-        delete iptr;
-    } catch (...) {
-        cout << "Destroy Element Test PASSED" << endl;
-    }
-
-    cout << "Destroy Element Test FAILED" << endl;
+    cout << "Destroy Element Test " << ( *iptr == 20 ? "PASSED" : "FAILED") << endl;
+    delete iptr;
 }
