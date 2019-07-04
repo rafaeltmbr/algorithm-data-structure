@@ -19,6 +19,7 @@ class Stack {
     StackElement* topPtr;
     destroy_t destroyData;
     int length;
+    void deleteTop(void);
 public:
     Stack();
     Stack(destroy_t destroyFunction);

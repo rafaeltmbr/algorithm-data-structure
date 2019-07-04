@@ -18,6 +18,13 @@ Stack::~Stack()
     destroy();
 }
 
+void Stack::deleteTop(void)
+{
+    StackElement *below = topPtr->below;
+    delete topPtr;
+    topPtr = below;
+}
+
 void Stack::push(void *data)
 {
     StackElement *se = new StackElement(data, topPtr ? topPtr : nullptr);
@@ -32,9 +39,7 @@ void* Stack::pop(void)
 
     length--;
     void *d = topPtr->data;
-    StackElement *below = topPtr->below;
-    delete topPtr;
-    topPtr = below;
+    deleteTop();
     return d;
 }
 
@@ -50,13 +55,10 @@ int Stack::size(void)
 
 void Stack::destroy(void)
 {
-    StackElement *below;
     while (topPtr) {
         if (destroyData)
             destroyData(topPtr->data);
-        below = topPtr->below;
-        delete topPtr;
-        topPtr = below;
+        deleteTop();
         length--;
     }
 }
