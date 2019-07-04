@@ -26,10 +26,10 @@ public:
     ~Stack();
     void push(void *data);
     void* pop(void);
-    void* top(void);
-    int size(void);
+    void* top(void) { return topPtr->data; };
+    int size(void) { return length; };
     void destroy(void);
-    void setDestroy(destroy_t destroyFunction);
+    void setDestroy(destroy_t destroyFunction) { destroyData=destroyFunction; };
 };
 
 #endif // STACK_HPP

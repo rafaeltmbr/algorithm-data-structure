@@ -43,16 +43,6 @@ void* Stack::pop(void)
     return d;
 }
 
-void* Stack::top(void)
-{
-    return topPtr->data;
-}
-
-int Stack::size(void)
-{
-    return length;
-}
-
 void Stack::destroy(void)
 {
     while (topPtr) {
@@ -61,9 +51,4 @@ void Stack::destroy(void)
         deleteTop();
         length--;
     }
-}
-
-void Stack::setDestroy(destroy_t destroyFunction)
-{
-    destroyData = destroyFunction;
 }
