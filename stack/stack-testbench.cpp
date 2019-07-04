@@ -1,3 +1,8 @@
+/*
+Build commands:
+    g++ stack-testbench.cpp stack.cpp -Wall -g -std=c++14 -o stack-testbench.exe
+*/
+
 #include <iostream>
 #include <cstdlib>
 #include "stack.hpp"
@@ -37,6 +42,8 @@ void testPushingPoping(Stack& stack)
     ASSERT( stack.pop() == &d, "Invalid pop");
     ASSERT( stack.pop() == &i, "Invalid pop");
     ASSERT( stack.size() == 0, "Wrong size");
+
+    cout << "Pushing and Poping Test SUCCEED" << endl;
 }
 
 void testTop(Stack& stack)
@@ -46,28 +53,33 @@ void testTop(Stack& stack)
 
     stack.push( (void*) &i);
     stack.push( (void*) &d);
-    
+
     ASSERT( stack.size() == 2, "Wrong size");
     ASSERT( stack.top() == &d, "Invalid top");
     stack.pop();
     ASSERT( stack.top() == &i, "Invalid top");
     stack.pop();
     ASSERT( stack.size() == 0, "Wrong size");
+
+    cout << "Top Test SUCCEED" << endl;
 }
 
 void destroy(void *data)
 {
-    *(int*) data = 10;
+    int *d = (int*) data;
+    *d = (*d) * 2;
 }
 
 void testDestroy(Stack& stack)
 {
     int i = 5;
-    stack.destroy();
+    stack.setDestroy(destroy);
 
     stack.push( (void*) &i);
     ASSERT( stack.top() == &i, "Invaild top");
-    stack.setDestroy(destroy);
+    stack.destroy();
     ASSERT( i == 10, "Failed on destroy");
     ASSERT( stack.size() == 0, "Invalid size");
+
+    cout << "Destroy SUCCEED" << endl;
 }

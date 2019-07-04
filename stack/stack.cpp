@@ -32,7 +32,7 @@ void* Stack::pop(void)
 
     length--;
     void *d = topPtr->data;
-    StackElement* below = topPtr->below;
+    StackElement *below = topPtr->below;
     delete topPtr;
     topPtr = below;
     return d;
