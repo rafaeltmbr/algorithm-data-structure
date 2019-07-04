@@ -29,6 +29,7 @@ class Queue {
 public:
     Queue();
     Queue(destroy_t);
+    ~Queue();
     void enqueue(void *data);
     void* dequeue(void);
     void* peek(void) { return head ? head->data : nullptr; }

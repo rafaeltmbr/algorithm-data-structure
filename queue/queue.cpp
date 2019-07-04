@@ -13,6 +13,12 @@ Queue::Queue(destroy_t destroyFunction): Queue()
     destroyData = destroyFunction;
 }
 
+Queue::~Queue()
+{
+    destroyData = nullptr;
+    destroy();
+}
+
 void Queue::deleteHead(void)
 {
     QueueElement *next = head->next;
