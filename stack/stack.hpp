@@ -8,7 +8,7 @@ public:
     void* data;
     StackElement* below;
 
-    StackElement(void *data, StackElement* below)
+    StackElement(void *data, StackElement *below)
     {
         this->data = data;
         this->below = below;
