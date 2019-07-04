@@ -16,7 +16,7 @@ public:
 };
 
 class Stack {
-    StackElement* topPtr;
+    StackElement *topPtr;
     destroy_t destroyData;
     int length;
     void deleteTop(void);
