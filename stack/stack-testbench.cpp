@@ -25,6 +25,7 @@ int main()
     testPushingPoping(stack);
     testTop(stack);
     testDestroy(stack);
+    cout << "\tStack Testbench SUCCEED" << endl;
 }
 
 void testPushingPoping(Stack& stack)
