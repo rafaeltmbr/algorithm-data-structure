@@ -26,7 +26,7 @@ public:
     ~Stack();
     void push(void *data);
     void* pop(void);
-    void* top(void) { return topPtr->data; };
+    void* top(void) { return topPtr ? topPtr->data : nullptr; };
     int size(void) { return length; };
     void destroy(void);
     void setDestroy(destroy_t destroyFunction) { destroyData=destroyFunction; };
