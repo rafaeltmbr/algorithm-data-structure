@@ -2,7 +2,7 @@
 
 Stack::Stack()
 {
-    topPtr = nullptr;
+    top = nullptr;
     destroyData = nullptr;
     length = 0;
 }
@@ -20,15 +20,15 @@ Stack::~Stack()
 
 void Stack::deleteTop(void)
 {
-    StackElement *below = topPtr->below;
-    delete topPtr;
-    topPtr = below;
+    StackElement *below = top->below;
+    delete top;
+    top = below;
 }
 
 void Stack::push(void *data)
 {
-    StackElement *se = new StackElement(data, topPtr ? topPtr : nullptr);
-    topPtr = se;
+    StackElement *se = new StackElement(data, top ? top : nullptr);
+    top = se;
     length++;
 }
 
@@ -38,16 +38,16 @@ void* Stack::pop(void)
         return nullptr;
 
     length--;
-    void *d = topPtr->data;
+    void *d = top->data;
     deleteTop();
     return d;
 }
 
 void Stack::destroy(void)
 {
-    while (topPtr) {
+    while (top) {
         if (destroyData)
-            destroyData(topPtr->data);
+            destroyData(top->data);
         deleteTop();
         length--;
     }

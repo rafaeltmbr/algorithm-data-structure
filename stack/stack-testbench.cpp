@@ -16,14 +16,14 @@ using namespace std;
     }
 
 void testPushingPoping(Stack& stack);
-void testTop(Stack& stack);
+void testPeek(Stack& stack);
 void testDestroy(Stack& stack);
 
 int main()
 {
     Stack stack;
     testPushingPoping(stack);
-    testTop(stack);
+    testPeek(stack);
     testDestroy(stack);
     cout << "\tStack Testbench SUCCEED" << endl;
 }
@@ -47,7 +47,7 @@ void testPushingPoping(Stack& stack)
     cout << "Pushing and Poping Test SUCCEED" << endl;
 }
 
-void testTop(Stack& stack)
+void testPeek(Stack& stack)
 {
     int i = 35;
     double d = 2.178;
@@ -56,13 +56,13 @@ void testTop(Stack& stack)
     stack.push( (void*) &d);
 
     ASSERT( stack.size() == 2, "Wrong size");
-    ASSERT( stack.top() == &d, "Invalid top");
+    ASSERT( stack.peek() == &d, "Invalid peek");
     stack.pop();
-    ASSERT( stack.top() == &i, "Invalid top");
+    ASSERT( stack.peek() == &i, "Invalid peek");
     stack.pop();
     ASSERT( stack.size() == 0, "Wrong size");
 
-    cout << "Top Test SUCCEED" << endl;
+    cout << "Peek Test SUCCEED" << endl;
 }
 
 void destroy(void *data)
@@ -77,7 +77,7 @@ void testDestroy(Stack& stack)
     stack.setDestroy(destroy);
 
     stack.push( (void*) &i);
-    ASSERT( stack.top() == &i, "Invaild top");
+    ASSERT( stack.peek() == &i, "Invaild peek");
     stack.destroy();
     ASSERT( i == 10, "Failed on destroy");
     ASSERT( stack.size() == 0, "Invalid size");
