@@ -15,20 +15,21 @@ using namespace std;
         exit(EXIT_FAILURE); \
     }
 
-void testPushingPoping(Stack& stack);
-void testPeek(Stack& stack);
-void testDestroy(Stack& stack);
+void testPushingPoping(Stack &stack);
+void testPeek(Stack &stack);
+void testDestroy(Stack &stack);
 
 int main()
 {
     Stack stack;
+    cout << "---------------------- Stack Testbench ---------------------\n";
     testPushingPoping(stack);
     testPeek(stack);
     testDestroy(stack);
-    cout << "\tStack Testbench SUCCEED" << endl;
+    cout << "-------------------- Testbench SUCCEED --------------------" << endl;
 }
 
-void testPushingPoping(Stack& stack)
+void testPushingPoping(Stack &stack)
 {
     int i = 35;
     double d = 2.178;
@@ -47,7 +48,7 @@ void testPushingPoping(Stack& stack)
     cout << "Pushing and Poping Test SUCCEED" << endl;
 }
 
-void testPeek(Stack& stack)
+void testPeek(Stack &stack)
 {
     int i = 35;
     double d = 2.178;
@@ -71,7 +72,7 @@ void destroy(void *data)
     *d = (*d) * 2;
 }
 
-void testDestroy(Stack& stack)
+void testDestroy(Stack &stack)
 {
     int i = 5;
     stack.setDestroy(destroy);

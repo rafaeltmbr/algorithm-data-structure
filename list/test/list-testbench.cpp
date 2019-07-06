@@ -14,24 +14,24 @@
 #include <cstdlib>  // exit()
 
 using namespace std;
-List list;
 
-void testInsertRemove(void);
-void testDestruction(void);
-void testElementCheck(void);
-void testDestroyElement(void);
+void testInsertRemove(List &list);
+void testDestruction(List &list);
+void testElementCheck(List &list);
+void testDestroyElement(List &list);
 
 int main()
 {
+    List list;
     cout << "---------------------- List Testbench ---------------------\n";
-    testInsertRemove();
-    testDestruction();
-    testElementCheck();
-    testDestroyElement();
+    testInsertRemove(list);
+    testDestruction(list);
+    testElementCheck(list);
+    testDestroyElement(list);
     cout << "-------------------- Testbench SUCCEED --------------------" << endl;
 }
 
-void testInsertRemove(void)
+void testInsertRemove(List &list)
 {
     int i = 32, *iptr;
     double d = 3.1416, *dptr;
@@ -55,7 +55,7 @@ void testInsertRemove(void)
 
 #define DESTRUCTION_TIMES 10
 
-void testDestruction(void)
+void testDestruction(List &list)
 {
     int array[DESTRUCTION_TIMES];
 
@@ -69,7 +69,7 @@ void testDestruction(void)
     cout << "Destruction Test PASSED" << endl;
 }
 
-void testElementCheck(void)
+void testElementCheck(List &list)
 {
     int a[] = {10, 20, 30};
 
@@ -96,7 +96,7 @@ void destroyInt(void *data)
     *iptr = 20;
 }
 
-void testDestroyElement(void)
+void testDestroyElement(List &list)
 {
     int *iptr = new int(10);
     list.setDestroy(destroyInt);

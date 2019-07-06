@@ -22,10 +22,11 @@ void testDestroy(Queue &queue);
 int main()
 {
     Queue queue;
+    cout << "---------------------- Queue Testbench ---------------------\n";
     testEnqueueDequeue(queue);
     testPeek(queue);
     testDestroy(queue);
-    cout << "\tQueue Test SUCCEED" << endl;
+    cout << "-------------------- Testbench SUCCEED --------------------" << endl;
 }
 
 void testEnqueueDequeue(Queue &queue)
