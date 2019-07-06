@@ -1,11 +1,11 @@
 /*
 Build commands:
-    g++ stack-testbench.cpp stack.cpp -Wall -g -std=c++14 -o stack-testbench.exe
+    g++ stack-testbench.cpp ../src/list.cpp -Wall -g -std=c++14 -o stack.exe
 */
 
 #include <iostream>
 #include <cstdlib>
-#include "stack.hpp"
+#include "../include/stack.hpp"
 
 using namespace std;
 
@@ -38,11 +38,11 @@ void testPushingPoping(Stack& stack)
     stack.push( (void*) &d);
     stack.push( (void*) &s);
 
-    ASSERT( stack.size() == 3, "Wrong size");
+    ASSERT( stack.getSize() == 3, "Wrong size");
     ASSERT( stack.pop() == &s, "Invalid pop");
     ASSERT( stack.pop() == &d, "Invalid pop");
     ASSERT( stack.pop() == &i, "Invalid pop");
-    ASSERT( stack.size() == 0, "Wrong size");
+    ASSERT( stack.getSize() == 0, "Wrong size");
 
     cout << "Pushing and Poping Test SUCCEED" << endl;
 }
@@ -55,12 +55,12 @@ void testPeek(Stack& stack)
     stack.push( (void*) &i);
     stack.push( (void*) &d);
 
-    ASSERT( stack.size() == 2, "Wrong size");
+    ASSERT( stack.getSize() == 2, "Wrong size");
     ASSERT( stack.peek() == &d, "Invalid peek");
     stack.pop();
     ASSERT( stack.peek() == &i, "Invalid peek");
     stack.pop();
-    ASSERT( stack.size() == 0, "Wrong size");
+    ASSERT( stack.getSize() == 0, "Wrong size");
 
     cout << "Peek Test SUCCEED" << endl;
 }
@@ -80,7 +80,7 @@ void testDestroy(Stack& stack)
     ASSERT( stack.peek() == &i, "Invaild peek");
     stack.destroy();
     ASSERT( i == 10, "Failed on destroy");
-    ASSERT( stack.size() == 0, "Invalid size");
+    ASSERT( stack.getSize() == 0, "Invalid size");
 
     cout << "Destroy SUCCEED" << endl;
 }

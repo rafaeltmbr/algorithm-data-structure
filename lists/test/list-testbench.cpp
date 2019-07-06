@@ -1,10 +1,5 @@
-/**
- * Doxygen comments
- * @page
- * Singly Linked List testbench.
- * <em> Build commands:
- *   g++ singly-linked-testbench.cpp singly-linked.cpp -g -std=c++14 -Wall -o singly-linked.exe
- * </em>
+/*
+    g++ list-testbench.cpp ../src/list.cpp -g -std=c++14 -Wall -o list.exe
  */
 
 #define ASSERT(cond, msg) { \
@@ -14,12 +9,12 @@
     } \
 }
 
-#include "singly-linked.hpp"
+#include "../include/list.hpp"
 #include <iostream> // cout, endl
 #include <cstdlib>  // exit()
 
 using namespace std;
-SinglyLinked list;
+List list;
 
 void testInsertRemove(void);
 void testDestruction(void);
@@ -28,10 +23,12 @@ void testDestroyElement(void);
 
 int main()
 {
+    cout << "---------------------- List Testbench ---------------------\n";
     testInsertRemove();
     testDestruction();
     testElementCheck();
     testDestroyElement();
+    cout << "-------------------- Testbench SUCCEED --------------------" << endl;
 }
 
 void testInsertRemove(void)
@@ -45,9 +42,9 @@ void testInsertRemove(void)
     list.insertNext(nullptr, &s);
     ASSERT(list.getSize() == 3, "List can't insert all elements.");
 
-    list.removeNext(nullptr, (void**) &sptr);
-    list.removeNext(nullptr, (void**) &dptr);
-    list.removeNext(nullptr, (void**) &iptr);
+    sptr = (string*) list.removeNext(nullptr);
+    dptr = (double*) list.removeNext(nullptr);
+    iptr = (int*) list.removeNext(nullptr);
     ASSERT(&i == iptr, "Returned object mismatch.");
     ASSERT(&d == dptr, "Returned object mismatch.");
     ASSERT(&s == sptr, "Returned object mismatch.");
@@ -102,7 +99,10 @@ void destroyInt(void *data)
 void testDestroyElement(void)
 {
     int *iptr = new int(10);
-    list.setDestroy(destroyInt).insertNext(nullptr, iptr).destroy().setDestroy(nullptr);
+    list.setDestroy(destroyInt);
+    list.insertNext(nullptr, iptr);
+    list.destroy();
+    list.setDestroy(nullptr);
 
     cout << "Destroy Element Test " << ( *iptr == 20 ? "PASSED" : "FAILED") << endl;
     delete iptr;

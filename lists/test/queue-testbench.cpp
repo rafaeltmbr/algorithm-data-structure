@@ -1,9 +1,9 @@
-/**
- * Built commands:
- *  g++ queue-testbench.cpp queue.cpp -Wall -g -std=c++14 -o queue-testbench.exe
- */
+/*
+Built commands:
+  g++ queue-testbench.cpp ../src/list.cpp -Wall -g -std=c++14 -o queue.exe
+*/
 
-#include "queue.hpp"
+#include "../include/queue.hpp"
 #include <iostream>
 #include <cstdlib>
 
@@ -34,16 +34,16 @@ void testEnqueueDequeue(Queue &queue)
     double d = 1.23456;
     string s = "Aloha";
 
-    ASSERT(queue.size() == 0, "Queue must be empty");
+    ASSERT(queue.getSize() == 0, "Queue must be empty");
     queue.enqueue( (void*) &i);
     queue.enqueue( (void*) &d);
     queue.enqueue( (void*) &s);
 
-    ASSERT( queue.size() == 3, "Queue size failed");
+    ASSERT( queue.getSize() == 3, "Queue size failed");
     ASSERT( queue.dequeue() == &i, "Dequeue failed");
     ASSERT( queue.dequeue() == &d, "Dequeue failed");
     ASSERT( queue.dequeue() == &s, "Dequeue failed");
-    ASSERT( queue.size() == 0, "Queue size failed");
+    ASSERT( queue.getSize() == 0, "Queue size failed");
 
     cout << "Enqueue and Dequeue Test SUCCEED" << endl;
 }
@@ -53,16 +53,16 @@ void testPeek(Queue &queue)
     int i = 11;
     double d = 1.23456;
 
-    ASSERT(queue.size() == 0, "Queue must be empty");
+    ASSERT(queue.getSize() == 0, "Queue must be empty");
     queue.enqueue( (void*) &i);
     queue.enqueue( (void*) &d);
-    ASSERT(queue.size() == 2, "Queue size failed");
+    ASSERT(queue.getSize() == 2, "Queue size failed");
 
     ASSERT(queue.peek() == &i, "Peek failed");
     queue.dequeue();
     ASSERT(queue.peek() == &d, "Peek failed");
     queue.dequeue();
-    ASSERT(queue.size() == 0, "Queue size failed");
+    ASSERT(queue.getSize() == 0, "Queue size failed");
 
     cout << "Peek Test SUCCEED" << endl;
 }
@@ -76,13 +76,13 @@ void destroy(void *data)
 void testDestroy(Queue &queue)
 {
     int i = 15;
-    ASSERT(queue.size() == 0, "Queue must be empty");
+    ASSERT(queue.getSize() == 0, "Queue must be empty");
     queue.setDestroy(destroy);
 
     queue.enqueue( (void*) &i );
     queue.destroy();
     ASSERT(i == 30, "Destroy failed");
-    ASSERT(queue.size() == 0, "Queue size failed");
+    ASSERT(queue.getSize() == 0, "Queue size failed");
 
     cout << "Destroy Test SUCCEED" << endl;
 }

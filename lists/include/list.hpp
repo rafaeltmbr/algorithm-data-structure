@@ -1,15 +1,5 @@
-#ifndef SINGLY_LINKED_LIST
-#define SINGLY_LINKED_LIST
-
-#define LIST_SUCCESS 0
-#define LIST_FAILURE -1
-
-/**
- * Doxygen comments
- * @mainpage
- * This is a implementation of a singly linked list that appears in the book
- * Mastering Algorithms with C - Kyle Loudon.
- */
+#ifndef LIST_HPP
+#define LIST_HPP
 
 class ListElement {
 public:
@@ -23,19 +13,20 @@ public:
 
 typedef void (*destroy_t) (void *data);
 
-class SinglyLinked {
+class List {
+protected:
     int size;
     ListElement *head, *tail;
     destroy_t destroyData;
     void* deleteHead(void);
 public:
-    SinglyLinked();
-    SinglyLinked(destroy_t destroy);
-    ~SinglyLinked();
-    SinglyLinked& destroy(void);
-    SinglyLinked& setDestroy(destroy_t destroy);
-    SinglyLinked& insertNext(ListElement *element, void *data);
-    SinglyLinked& removeNext(ListElement *element, void **data);
+    List();
+    List(destroy_t destroy);
+    ~List();
+    void destroy(void);
+    void setDestroy(destroy_t destroy) { destroyData = destroy; };
+    void insertNext(ListElement *element, void *data);
+    void* removeNext(ListElement *element);
     int getSize(void) { return size; }
     ListElement* getHead(void) { return head; }
     ListElement* getTail(void) { return tail; }
@@ -43,4 +34,4 @@ public:
     bool isTail(const ListElement *element) { return tail == element; }
 };
 
-#endif // SINGLY_LINKED_LIST
+#endif // LIST_HPP
