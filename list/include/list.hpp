@@ -6,7 +6,11 @@ public:
     void* data;
     ListElement* next;
 
-    ListElement(void *d = nullptr, ListElement *n = nullptr): data{d}, next{n} {}
+    ListElement(void *data = nullptr, ListElement *next = nullptr)
+    {
+        this->data = data;
+        this->next = next;
+    }
     void* getData(void) { return data; }
     ListElement& getNext(void) { return *next; }
 };
@@ -21,13 +25,14 @@ protected:
     void* deleteHead(void);
 public:
     List();
-    List(destroy_t destroy);
+    List(destroy_t destroyFunc): List() { destroyData = destroyFunc; };
     ~List();
     void destroy(void);
-    void setDestroy(destroy_t destroy) { destroyData = destroy; };
+    void destroy(destroy_t destroyFunc);
     void insertNext(ListElement *element, void *data);
     void* removeNext(ListElement *element);
     int getSize(void) { return size; }
+    ListElement* next(ListElement *element) {return element ? element->next : nullptr; }
     ListElement* getHead(void) { return head; }
     ListElement* getTail(void) { return tail; }
     bool isHead(const ListElement *element) { return head == element; }

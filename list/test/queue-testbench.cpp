@@ -78,10 +78,10 @@ void testDestroy(Queue &queue)
 {
     int i = 15;
     ASSERT(queue.getSize() == 0, "Queue must be empty");
-    queue.setDestroy(destroy);
 
     queue.enqueue( (void*) &i );
-    queue.destroy();
+    queue.destroy(destroy);
+    
     ASSERT(i == 30, "Destroy failed");
     ASSERT(queue.getSize() == 0, "Queue size failed");
 

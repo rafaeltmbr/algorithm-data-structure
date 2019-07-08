@@ -2,14 +2,13 @@
 
 #define CLEAR_ELEMENT(e) (e)->data = (e)->next = nullptr;
 
-List::List(): List(nullptr) {}
-
-List::List(destroy_t destroy)
-    : size{0}
-    , head{nullptr}
-    , tail{nullptr}
-    , destroyData{destroy}
-{}
+List::List()
+{
+    size = 0;
+    head = nullptr;
+    tail = nullptr;
+    destroyData = nullptr;
+}
 
 List::~List()
 {
@@ -25,7 +24,7 @@ void* List::deleteHead(void)
     void *data = old->data;
     head = old->next;
     CLEAR_ELEMENT(old);
-    
+
     delete old;
     size--;
 
@@ -45,6 +44,14 @@ void List::destroy(void)
     } else {
         while(head)
             deleteHead();
+    }
+}
+
+void List::destroy(destroy_t destroyFunc)
+{
+    while(head) {
+        destroyFunc(head->data);
+        deleteHead();
     }
 }
 
@@ -68,10 +75,10 @@ void List::insertNext(ListElement *element, void *data)
 
 void* List::removeNext(ListElement *element)
 {
-    if (element == nullptr)
+    if (!element)
         return deleteHead();
-    
-    if (size < 1 || element == tail)
+
+    if (!element->next)
         return nullptr;
 
     ListElement *removedElement = element->next;

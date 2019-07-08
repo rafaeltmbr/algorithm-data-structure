@@ -99,10 +99,8 @@ void destroyInt(void *data)
 void testDestroyElement(List &list)
 {
     int *iptr = new int(10);
-    list.setDestroy(destroyInt);
     list.insertNext(nullptr, iptr);
-    list.destroy();
-    list.setDestroy(nullptr);
+    list.destroy(destroyInt);
 
     cout << "Destroy Element Test " << ( *iptr == 20 ? "PASSED" : "FAILED") << endl;
     delete iptr;

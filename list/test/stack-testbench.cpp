@@ -75,11 +75,11 @@ void destroy(void *data)
 void testDestroy(Stack &stack)
 {
     int i = 5;
-    stack.setDestroy(destroy);
 
     stack.push( (void*) &i);
     ASSERT( stack.peek() == &i, "Invaild peek");
-    stack.destroy();
+    stack.destroy(destroy);
+    
     ASSERT( i == 10, "Failed on destroy");
     ASSERT( stack.getSize() == 0, "Invalid size");
 
