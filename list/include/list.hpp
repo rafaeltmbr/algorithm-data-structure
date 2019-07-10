@@ -29,10 +29,12 @@ public:
     ~List();
     void destroy(void);
     void destroy(destroy_t destroyFunc);
+    void setDestroy(destroy_t destroyFunc) { destroyData = destroyFunc; }
     void insertNext(ListElement *element, void *data);
     void* removeNext(ListElement *element);
     int getSize(void) { return size; }
-    ListElement* next(ListElement *element) {return element ? element->next : nullptr; }
+    void* getData(ListElement *element) {return element ? element->data : nullptr; }
+    ListElement* getNext(ListElement *element) {return element ? element->next : nullptr; }
     ListElement* getHead(void) { return head; }
     ListElement* getTail(void) { return tail; }
     bool isHead(const ListElement *element) { return head == element; }

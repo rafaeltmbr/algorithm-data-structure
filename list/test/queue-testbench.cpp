@@ -46,7 +46,7 @@ void testEnqueueDequeue(Queue &queue)
     ASSERT( queue.dequeue() == &s, "Dequeue failed");
     ASSERT( queue.getSize() == 0, "Queue size failed");
 
-    cout << "Enqueue and Dequeue Test SUCCEED" << endl;
+    cout << "Enqueue and Dequeue Test PASSED" << endl;
 }
 
 void testPeek(Queue &queue)
@@ -65,7 +65,7 @@ void testPeek(Queue &queue)
     queue.dequeue();
     ASSERT(queue.getSize() == 0, "Queue size failed");
 
-    cout << "Peek Test SUCCEED" << endl;
+    cout << "Peek Test PASSED" << endl;
 }
 
 void destroy(void *data)
@@ -85,5 +85,5 @@ void testDestroy(Queue &queue)
     ASSERT(i == 30, "Destroy failed");
     ASSERT(queue.getSize() == 0, "Queue size failed");
 
-    cout << "Destroy Test SUCCEED" << endl;
+    cout << "Destroy Test PASSED" << endl;
 }

@@ -45,7 +45,7 @@ void testPushingPoping(Stack &stack)
     ASSERT( stack.pop() == &i, "Invalid pop");
     ASSERT( stack.getSize() == 0, "Wrong size");
 
-    cout << "Pushing and Poping Test SUCCEED" << endl;
+    cout << "Pushing and Poping Test PASSED" << endl;
 }
 
 void testPeek(Stack &stack)
@@ -63,7 +63,7 @@ void testPeek(Stack &stack)
     stack.pop();
     ASSERT( stack.getSize() == 0, "Wrong size");
 
-    cout << "Peek Test SUCCEED" << endl;
+    cout << "Peek Test PASSED" << endl;
 }
 
 void destroy(void *data)
@@ -83,5 +83,5 @@ void testDestroy(Stack &stack)
     ASSERT( i == 10, "Failed on destroy");
     ASSERT( stack.getSize() == 0, "Invalid size");
 
-    cout << "Destroy SUCCEED" << endl;
+    cout << "Destroy PASSED" << endl;
 }
