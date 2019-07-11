@@ -3,7 +3,6 @@
 
 #include "../../list/include/list.hpp"
 
-typedef void (*destroy_t)(void *data);
 typedef bool (*match_t)(void *data1, void *data2);
 
 class Set: public List {
