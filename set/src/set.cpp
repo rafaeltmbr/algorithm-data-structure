@@ -2,7 +2,7 @@
 
 ListElement* Set::getListElement(void *data)
 {
-    ListElement *le = list.getHead();
+    ListElement *le = getHead();
     while(le) {
         if ( match_(le->data, data) )
             return le;
@@ -13,7 +13,7 @@ ListElement* Set::getListElement(void *data)
 
 ListElement* Set::getPreviousListElement(void *data)
 {
-    ListElement *le = list.getHead();
+    ListElement *le = getHead();
     if (!le || match_(le->data, data) )
         return nullptr;
 
@@ -25,33 +25,12 @@ ListElement* Set::getPreviousListElement(void *data)
     return nullptr;
 }
 
-Set::Set()
-{
-    this->destroy_ = nullptr;
-    this->match_ = nullptr;
-    this->list = nullptr;
-}
-
-Set::Set(match_t match_, destroy_t destroy_)
-{
-    this->match_ = match_;
-    this->destroy_ = destroy_;
-}
-
-Set::~Set()
-{
-    list.destroy(destroy_);
-    destroy_ = nullptr;
-    match_ = nullptr;
-    list = nullptr;
-}
-
 bool Set::insert(void *data)
 {
-    if (getListElement(data))
+    if (isMember(data))
         return false;
     
-    list.insertNext(nullptr, data);
+    insertNext(nullptr, data);
     return true;
 }
 
@@ -60,34 +39,55 @@ bool Set::remove(void *data)
     ListElement *le = getPreviousListElement(data);
 
     if (le) {
-        list.removeNext(le);
+        removeNext(le);
         return true;
     }
 
-    if( (le = list.getHead()) && match_(le->data, data) ) {
-        list.removeNext(nullptr);
+    if( (le = getHead()) && match_(le->data, data) ) {
+        removeNext(nullptr);
         return true;
     }
 
     return false;
 }
 
-bool Set::union_(Set &su, Set &s)
+bool Set::union_(Set &s1, Set &s2)
 {
+    ListElement *le = s1.getHead();
+    while(le) {
+        insert(le->data);
+        le = le->next;
+    }
 
-    return false;
+    le = s2.getHead();
+    while(le) {
+        insert(le->data);
+        le = le->next;
+    }
+
+    return true;
 }
 
-bool Set::intersection(Set &si, Set &s)
+bool Set::intersection(Set &s1, Set &s2)
 {
-
-    return false;
+    ListElement *le = s1.getHead();
+    while(le) {
+        if (s2.isMember(le->data))
+            insert(le->data);
+        le = le->next;
+    }
+    return true;
 }
 
-bool Set::difference(Set &sd, Set &s)
+bool Set::difference(Set &s1, Set &s2)
 {
-
-    return false;
+    ListElement *le = s1.getHead();
+    while(le) {
+        if (!s2.isMember(le->data))
+            insert(le->data);
+        le = le->next;
+    }
+    return true;
 }
 
 bool Set::isMember(void *data)
@@ -97,12 +97,19 @@ bool Set::isMember(void *data)
 
 bool Set::isSubset(Set &s)
 {
-    
-    return false;
+    ListElement *le = s.getHead();
+    while(le) {
+        if (!isMember(le->data))
+            return false;
+        le = le->next;
+    }
+    return true;
 }
 
 bool Set::isEqual(Set &s)
 {
-    
-    return false;
+    if (size != s.getSize())
+        return false;
+
+    return isSubset(s);
 }

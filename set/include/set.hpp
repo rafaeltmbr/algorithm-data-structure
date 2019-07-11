@@ -6,27 +6,20 @@
 typedef void (*destroy_t)(void *data);
 typedef bool (*match_t)(void *data1, void *data2);
 
-class Set {
+class Set: public List {
 protected:
-    destroy_t destroy_;
     match_t match_;
-    List list;
     ListElement* getListElement(void *data);
     ListElement* getPreviousListElement(void *data);
 public:
-    Set();
-    Set(match_t match_, destroy_t destroy_);
-    ~Set();
-    void setMatch(match_t match) { this->match_ = match_; }
-    void setDestroy(destroy_t destroy_) { this->destroy_ = destroy_; }
-    void destroy(void) { list.destroy(destroy_); }
-    void destroy(destroy_t destroy_) { list.destroy(destroy_); }
-    int getSize(void) { return list.getSize(); }
+    Set(): List() { match_ = nullptr; };
+    Set(match_t match_, destroy_t destroy_): List(destroy_) { this->match_ = match_; }
+    ~Set(){ match_ = nullptr; }
     bool insert(void *data);
     bool remove(void *data);
-    bool union_(Set &su, Set &s);
-    bool intersection(Set &si, Set &s);
-    bool difference(Set &sd, Set &s);
+    bool union_(Set &s1, Set &s2);
+    bool intersection(Set &s1, Set &s2);
+    bool difference(Set &s1, Set &s2);
     bool isMember(void *data);
     bool isSubset(Set &s);
     bool isEqual(Set &s);

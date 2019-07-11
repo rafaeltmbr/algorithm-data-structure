@@ -31,7 +31,6 @@ int main()
     testIntersection(set);
     testDifference(set);
     testIsMethods(set);
-    testDestroy(set);
     cout << "------------------------- Set SUCCEED -------------------------" << endl;
 }
 
@@ -63,42 +62,155 @@ void testInsertRemove(Set &set)
 
 void testUnion(Set &set)
 {
-    ASSERT(set.getSize() == 0, "getSize() failed");
+    int i1= 10, i2 = 20, i3 = 30, i4 = 40, i5 = 50, i6 = 60;
+    Set s1(matchInt, nullptr), s2(matchInt, nullptr);
+
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    ASSERT(s1.insert(&i1), "insert() failed");
+    ASSERT(s1.insert(&i2), "insert() failed");
+    ASSERT(s1.insert(&i3), "insert() failed");
+    ASSERT(s1.getSize() == 3, "getSize() failed");
+
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+    ASSERT(s2.insert(&i3), "insert() failed");
+    ASSERT(s2.insert(&i4), "insert() failed");
+    ASSERT(s2.insert(&i5), "insert() failed");
+    ASSERT(s2.getSize() == 3, "getSize() failed");
 
     ASSERT(set.getSize() == 0, "getSize() failed");
+    ASSERT(set.union_(s1, s2), "union() failed");
+    ASSERT(set.getSize() == 5, "getSize() failed");
+
+    ASSERT(set.isMember(&i1), "isMember() failed");
+    ASSERT(set.isMember(&i2), "isMember() failed");
+    ASSERT(set.isMember(&i3), "isMember() failed");
+    ASSERT(set.isMember(&i4), "isMember() failed");
+    ASSERT(set.isMember(&i5), "isMember() failed");
+    ASSERT(!set.isMember(&i6), "isMember() failed");
+
+    set.destroy();
+    ASSERT(set.getSize() == 0, "getSize() failed");
+
+    s1.destroy();
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    
+    s2.destroy();
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+
     cout << " Union Test PASSED\n";
 }
 
 void testIntersection(Set &set)
 {
-    ASSERT(set.getSize() == 0, "getSize() failed");
+    int i1= 10, i2 = 20, i3 = 30, i4 = 40, i5 = 50, i6 = 60;
+    Set s1(matchInt, nullptr), s2(matchInt, nullptr);
+
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    ASSERT(s1.insert(&i1), "insert() failed");
+    ASSERT(s1.insert(&i2), "insert() failed");
+    ASSERT(s1.insert(&i3), "insert() failed");
+    ASSERT(s1.insert(&i4), "insert() failed");
+    ASSERT(s1.getSize() == 4, "getSize() failed");
+
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+    ASSERT(s2.insert(&i3), "insert() failed");
+    ASSERT(s2.insert(&i4), "insert() failed");
+    ASSERT(s2.insert(&i5), "insert() failed");
+    ASSERT(s2.insert(&i6), "insert() failed");
+    ASSERT(s2.getSize() == 4, "getSize() failed");
 
     ASSERT(set.getSize() == 0, "getSize() failed");
+    ASSERT(set.intersection(s1, s2), "intersection() failed");
+    ASSERT(set.getSize() == 2, "getSize() failed");
+
+    ASSERT(set.isMember(&i3), "isMember() failed");
+    ASSERT(set.isMember(&i4), "isMember() failed");
+    ASSERT(!set.isMember(&i5), "isMember() failed");
+
+    set.destroy();
+    ASSERT(set.getSize() == 0, "getSize() failed");
+
+    s1.destroy();
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    
+    s2.destroy();
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+
     cout << " Intersection Test PASSED\n";
 }
 
 void testDifference(Set &set)
 {
-    ASSERT(set.getSize() == 0, "getSize() failed");
+    int i1= 10, i2 = 20, i3 = 30, i4 = 40, i5 = 50;
+    Set s1(matchInt, nullptr), s2(matchInt, nullptr);
+
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    ASSERT(s1.insert(&i1), "insert() failed");
+    ASSERT(s1.insert(&i2), "insert() failed");
+    ASSERT(s1.insert(&i3), "insert() failed");
+    ASSERT(s1.insert(&i4), "insert() failed");
+    ASSERT(s1.getSize() == 4, "getSize() failed");
+
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+    ASSERT(s2.insert(&i3), "insert() failed");
+    ASSERT(s2.insert(&i4), "insert() failed");
+    ASSERT(s2.insert(&i5), "insert() failed");
+    ASSERT(s2.getSize() == 3, "getSize() failed");
 
     ASSERT(set.getSize() == 0, "getSize() failed");
+    ASSERT(set.difference(s1, s2), "difference() failed");
+    ASSERT(set.getSize() == 2, "getSize() failed");
+
+    ASSERT(set.isMember(&i1), "isMember() failed");
+    ASSERT(set.isMember(&i2), "isMember() failed");
+    ASSERT(!set.isMember(&i3), "isMember() failed");
+
+    set.destroy();
+    ASSERT(set.getSize() == 0, "getSize() failed");
+
+    s1.destroy();
+    ASSERT(s1.getSize() == 0, "getSize() failed");
+    
+    s2.destroy();
+    ASSERT(s2.getSize() == 0, "getSize() failed");
+
     cout << " Difference Test PASSED\n";
 }
 
 void testIsMethods(Set &set)
 {
-    ASSERT(set.getSize() == 0, "getSize() failed");
+    int i1= 10, i2 = 20, i3 = 30, i4 = 40;
+    Set s(matchInt, nullptr);
 
     ASSERT(set.getSize() == 0, "getSize() failed");
-    cout << " Is Test PASSED\n";
-}
+    ASSERT(set.insert(&i1), "insert() failed");
+    ASSERT(set.insert(&i2), "insert() failed");
+    ASSERT(set.insert(&i3), "insert() failed");
+    ASSERT(set.getSize() == 3, "getSize() failed");
 
-void testDestroy(Set &set)
-{
+    ASSERT(s.getSize() == 0, "getSize() failed");
+    ASSERT(s.insert(&i2), "insert() failed");
+    ASSERT(s.insert(&i3), "insert() failed");
+    ASSERT(s.getSize() == 2, "getSize() failed");
+
+    ASSERT(set.isSubset(s), "isSubset() failed");
+    ASSERT(!set.isEqual(s), "isEqual() failed");
+
+    ASSERT(!s.isMember(&i1), "isMember() failed");
+    s.insert(&i1);
+    ASSERT(s.isMember(&i1), "isMember() failed");
+
+    ASSERT(set.isEqual(s), "isEqual() failed");
+    s.insert(&i4);
+    ASSERT(!set.isEqual(s), "isEqual() failed");
+
+    set.destroy();
     ASSERT(set.getSize() == 0, "getSize() failed");
 
-    ASSERT(set.getSize() == 0, "getSize() failed");
-    cout << " Destroy Test PASSED\n";
+    s.destroy();
+    ASSERT(s.getSize() == 0, "getSize() failed");
+
+    cout << " isMethods Test PASSED\n";
 }
 
 bool matchInt(void *data1, void *data2)
