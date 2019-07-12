@@ -21,7 +21,7 @@ void testIntersection(Set &set);
 void testDifference(Set &set);
 void testIsMethods(Set &set);
 void testDestroy(Set &set);
-bool matchInt(void *data1, void *data2);
+bool matchInt(const void *data1, const void *data2);
 
 int main()
 {
@@ -240,7 +240,7 @@ void testIsMethods(Set &set)
     cout << " isMethods Test PASSED\n";
 }
 
-bool matchInt(void *data1, void *data2)
+bool matchInt(const void *data1, const void *data2)
 {
     int d1 = *(int*) data1;
     int d2 = *(int*) data2;
