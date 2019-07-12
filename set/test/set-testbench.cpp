@@ -221,6 +221,7 @@ void testIsMethods(Set &set)
     ASSERT(s.getSize() == 2, "getSize() failed");
 
     ASSERT(set.isSubset(s), "isSubset() failed");
+    ASSERT(!s.isSubset(set), "isSubset() failed");
     ASSERT(!set.isEqual(s), "isEqual() failed");
 
     ASSERT(!s.isMember(&i1), "isMember() failed");
