@@ -101,7 +101,7 @@ void* Set::isMember(void *data)
 
 bool Set::isSubset(Set &s)
 {
-    if (size > s.size)
+    if (size < s.size)
         return false;
 
     ListElement *le = s.getHead();
