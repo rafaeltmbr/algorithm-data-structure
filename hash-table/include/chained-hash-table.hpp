@@ -8,6 +8,7 @@ typedef int (*hash_t)(const void *key);
 
 class ChainedHashTable {
 protected:
+    int size;
     match_t match;
     destroy_t destroyData;
     hash_t hash;
@@ -21,10 +22,10 @@ public:
     void setHash(hash_t hash) { this->hash = hash; }
     void destroy(void);
     void destroy(destroy_t);
-    bool insert(void *key);
-    void* remove(void *key);
-    void* lookup(void *key);
-    int size(void);
+    bool insert(void *data);
+    void* remove(void *data);
+    void* lookup(void *data);
+    int getSize(void);
 };
 
 #endif // CHAINED_HASH_TABLE_HPP
