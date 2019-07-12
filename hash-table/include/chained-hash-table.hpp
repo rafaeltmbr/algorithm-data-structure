@@ -11,6 +11,8 @@ protected:
     int keys;
     Set* table;
     hash_t hash;
+    match_t match;
+    destroy_t destroy_;
 
 public:
     ChainedHashTable();

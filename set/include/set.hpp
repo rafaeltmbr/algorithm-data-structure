@@ -3,7 +3,7 @@
 
 #include "../../list/include/list.hpp"
 
-typedef bool (*match_t)(void *data1, void *data2);
+typedef bool (*match_t)(const void *data1, const void *data2);
 
 class Set: public List {
 protected:
