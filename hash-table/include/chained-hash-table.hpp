@@ -1,31 +1,28 @@
 #ifndef CHAINED_HASH_TABLE_HPP
 #define CHAINED_HASH_TABLE_HPP
 
-#include "../../list/include/list.hpp"
+#include "../../set/include/set.hpp"
 
-typedef bool (*match_t)(const void *data1, const void *data2);
-typedef int (*hash_t)(const void *key);
+typedef int (*hash_t)(const void *data, int keys);
 
 class ChainedHashTable {
 protected:
     int size;
-    int dataSize;
     int keys;
-    match_t match;
-    destroy_t destroyData;
+    Set* table;
     hash_t hash;
+
 public:
     ChainedHashTable();
     ChainedHashTable(
-        hash_t hash,
+        int keys,
+        hash_t hash = nullptr,
         match_t matchFunc = nullptr,
-        destroy_t destroyFunc = nullptr,
-        int keys = 23,
-        int dataSize = 4 );
+        destroy_t destroyFunc = nullptr);
     ChainedHashTable(ChainedHashTable& chtable);
     ~ChainedHashTable();
-    void setDestroy(destroy_t destroyFunc) { destroyData = destroyFunc; };
-    void setMatch(match_t matchFunc) { this->match = matchFunc; }
+    void setDestroy(destroy_t destroyFunc);
+    void setMatch(match_t matchFunc);
     void setHash(hash_t hashFunc) { this->hash = hashFunc; }
     void destroy(void);
     void destroy(destroy_t destroyFunc);
@@ -33,6 +30,7 @@ public:
     void* remove(void *data);
     void* lookup(void *data);
     int getSize(void) { return size; };
+    int getKeys(void) { return keys; };
 };
 
 #endif // CHAINED_HASH_TABLE_HPP
