@@ -26,6 +26,7 @@ protected:
 public:
     List();
     List(destroy_t destroyFunc): List() { destroyData = destroyFunc; };
+    List(List &list);
     ~List();
     void destroy(void);
     void destroy(destroy_t destroyFunc);

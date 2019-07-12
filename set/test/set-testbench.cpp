@@ -14,6 +14,7 @@
 
 using namespace std;
 
+void testConstructor(Set &set);
 void testInsertRemove(Set &set);
 void testUnion(Set &set);
 void testIntersection(Set &set);
@@ -26,12 +27,38 @@ int main()
 {
     cout << "------------------------ Set Testbench ------------------------\n";
     Set set(matchInt, nullptr);
+    testConstructor(set);
     testInsertRemove(set);
     testUnion(set);
     testIntersection(set);
     testDifference(set);
     testIsMethods(set);
     cout << "------------------------- Set SUCCEED -------------------------" << endl;
+}
+
+void testConstructor(Set &set)
+{
+    int i = 10;
+    double d = 2.718;
+    string s = "Hello";
+
+    ASSERT(set.getSize() == 0, "getSize() failed");
+    set.insertNext(nullptr, &i);
+    set.insertNext(nullptr, &d);
+    set.insertNext(nullptr, &s);
+    ASSERT(set.getSize() == 3, "getSize() failed");
+
+    List copy(set);
+    ASSERT(set.getSize() == 3, "getSize() failed");
+
+    ASSERT(set.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(set.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(set.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+
+    ASSERT(copy.removeNext(nullptr) == nullptr, "removeNext() failed");
+    ASSERT(set.getSize() == 0, "getSize() failed");
+
+    cout << " Constructor Test PASSED" << endl;
 }
 
 void testInsertRemove(Set &set)

@@ -15,6 +15,7 @@
 
 using namespace std;
 
+void testConstructor(List &list);
 void testInsertRemove(List &list);
 void testDestruction(List &list);
 void testElementCheck(List &list);
@@ -24,11 +25,37 @@ int main()
 {
     List list;
     cout << "---------------------- List Testbench ---------------------\n";
+    testConstructor(list);
     testInsertRemove(list);
     testDestruction(list);
     testElementCheck(list);
     testDestroyElement(list);
     cout << "-------------------- Testbench SUCCEED --------------------" << endl;
+}
+
+void testConstructor(List &list)
+{
+    int i = 10;
+    double d = 2.718;
+    string s = "Hello";
+
+    ASSERT(list.getSize() == 0, "getSize() failed");
+    list.insertNext(nullptr, &i);
+    list.insertNext(nullptr, &d);
+    list.insertNext(nullptr, &s);
+    ASSERT(list.getSize() == 3, "getSize() failed");
+
+    List copy(list);
+    ASSERT(list.getSize() == 3, "getSize() failed");
+
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+
+    ASSERT(copy.removeNext(nullptr) == nullptr, "removeNext() failed");
+    ASSERT(list.getSize() == 0, "getSize() failed");
+
+    cout << "Constructor Test PASSED" << endl;
 }
 
 void testInsertRemove(List &list)

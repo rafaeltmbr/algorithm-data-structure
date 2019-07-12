@@ -12,6 +12,7 @@ protected:
     ListElement* getPreviousListElement(void *data);
 public:
     Set(): List() { match_ = nullptr; };
+    Set(Set &set): List(set) { match_ = set.match_; };
     Set(match_t match_, destroy_t destroy_): List(destroy_) { this->match_ = match_; }
     ~Set(){ match_ = nullptr; }
     bool insert(void *data);

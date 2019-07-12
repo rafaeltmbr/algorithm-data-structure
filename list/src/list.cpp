@@ -10,6 +10,21 @@ List::List()
     destroyData = nullptr;
 }
 
+List::List(List &list): List()
+{
+    destroyData = list.destroyData;
+    ListElement *le = list.head;
+    if (!le)
+        return;
+
+    insertNext(nullptr,  le->data);
+
+    while(le->next) {
+        insertNext(tail, le->next->data);
+        le = le->next;
+    }
+}
+
 List::~List()
 {
     destroy();
