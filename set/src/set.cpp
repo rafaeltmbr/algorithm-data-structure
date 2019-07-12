@@ -20,7 +20,7 @@ ListElement* Set::getPreviousListElement(void *data)
     while(le->next) {
         if ( match_(le->next->data, data) )
             return le;
-        le = le->next;        
+        le = le->next;
     }
     return nullptr;
 }
@@ -29,26 +29,29 @@ bool Set::insert(void *data)
 {
     if (isMember(data))
         return false;
-    
+
     insertNext(nullptr, data);
     return true;
 }
 
-bool Set::remove(void *data)
+void* Set::remove(void *data)
 {
     ListElement *le = getPreviousListElement(data);
+    void *d;
 
     if (le) {
+        d = le->next->data;
         removeNext(le);
-        return true;
+        return d;
     }
 
     if( (le = getHead()) && match_(le->data, data) ) {
+        d = le->data;
         removeNext(nullptr);
-        return true;
+        return d;
     }
 
-    return false;
+    return nullptr;
 }
 
 bool Set::union_(Set &s1, Set &s2)
@@ -90,9 +93,10 @@ bool Set::difference(Set &s1, Set &s2)
     return true;
 }
 
-bool Set::isMember(void *data)
+void* Set::isMember(void *data)
 {
-    return getListElement(data) != nullptr;
+    ListElement *d = getListElement(data);
+    return d ? d->data : d;
 }
 
 bool Set::isSubset(Set &s)
