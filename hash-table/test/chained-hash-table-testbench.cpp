@@ -98,22 +98,22 @@ void testContructor(ChainedHashTable &chtable)
 void testInsertRemoveLookup(ChainedHashTable &chtable)
 {
     ASSERT(chtable.getSize() == 0, "table must be empty");
-    
+
     for (int i=0; i < DA_SIZE; i++)
         ASSERT(chtable.insert(da+i), "interation(" << i << ") failed");
     ASSERT(chtable.getSize() == DA_SIZE, "getSize() failed");
-    
+
     ASSERT(chtable.remove(da+DA_SIZE-1), "remove() failed");
     ASSERT(!chtable.lookup(da+DA_SIZE-1), "lookup() failed");
     ASSERT(chtable.getSize() == DA_SIZE-1, "getSize() failed");
 
     for (int i=0; i < chtable.getSize(); i++)
         ASSERT(chtable.lookup(de+i), "lookup() failed");
-    
+
     ASSERT(chtable.getSize() == DA_SIZE-1, "getSize() failed");
     chtable.destroy();
     ASSERT(chtable.getSize() == 0, "table must be empty");
-    
+
     cout << " Insert, Remove and Lookup Test PASSED" << endl;
 }
 
@@ -142,7 +142,7 @@ void testDestroy(ChainedHashTable &chtable)
     chtable.destroy();
     ASSERT(d == 11, "destroy() failed");
     ASSERT(chtable.getSize() == 0, "table must be empty");
-    
+
     cout << " Destroy Test PASSED" << endl;
 }
 
