@@ -10,6 +10,7 @@ protected:
     int keys;
     int size;
     void **table;
+    int *maxInteration;
     match_t match;
     destroy_t destroy_;
     hash_t hash1, hash2;

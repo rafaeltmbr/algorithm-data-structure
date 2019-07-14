@@ -77,7 +77,7 @@ int main()
 
 void testContructor(OpenAddressedHashTable &ohtable)
 {
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
     ASSERT(ohtable.insert(da+2) == true, "insert() failed");
     ASSERT(ohtable.insert(da+3) == true, "insert() failed");
     ASSERT(ohtable.insert(da+5) == true, "insert() failed");
@@ -91,29 +91,29 @@ void testContructor(OpenAddressedHashTable &ohtable)
     ASSERT(!matchName(ohtable.remove(de+5), copy.remove(da+3) ), "remove() failed");
     ASSERT( matchName(ohtable.remove(de+7), copy.remove(da+7) ), "remove() failed");
 
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
-    ASSERT(copy.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
+    ASSERT(copy.getSize() == 0, "table should be empty");
     cout << " Constructor Test PASSED" << endl;
 }
 
 void testInsertRemoveLookup(OpenAddressedHashTable &ohtable)
 {
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
 
     for (int i=0; i < DA_SIZE; i++)
         ASSERT(ohtable.insert(da+i), "interation(" << i << ") failed");
     ASSERT(ohtable.getSize() == DA_SIZE, "getSize() failed");
 
-    ASSERT(ohtable.remove(da+DA_SIZE-1), "remove() failed");
-    ASSERT(!ohtable.lookup(da+DA_SIZE-1), "lookup() failed");
-    ASSERT(ohtable.getSize() == DA_SIZE-1, "getSize() failed");
+    for (int i=0; i < DA_SIZE; i++)
+        ASSERT( matchName( ohtable.lookup(de+i), de+i ), "lookup() failed" );
+    ASSERT(ohtable.getSize() == DA_SIZE, "getSize() failed");
 
-    for (int i=0; i < ohtable.getSize(); i++)
-        ASSERT(ohtable.lookup(de+i), "lookup() failed");
+    for (int i=0; i < DA_SIZE; i++)
+        ASSERT(ohtable.remove(da+i), "interation(" << i << ") failed");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
 
-    ASSERT(ohtable.getSize() == DA_SIZE-1, "getSize() failed");
     ohtable.destroy();
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
 
     cout << " Insert, Remove and Lookup Test PASSED" << endl;
 }
@@ -135,14 +135,14 @@ void testDestroy(OpenAddressedHashTable &ohtable)
     ohtable.setDestroy(destroy);
     ohtable.setMatch(matchInt);
 
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
     ASSERT(ohtable.insert(&d), "insert() failed");
     ASSERT(!ohtable.insert(&d), "insert() failed");
     ASSERT(ohtable.getSize() == 1, "getSize() failed");
 
     ohtable.destroy();
     ASSERT(d == 11, "destroy() failed");
-    ASSERT(ohtable.getSize() == 0, "table must be empty");
+    ASSERT(ohtable.getSize() == 0, "table should be empty");
 
     cout << " Destroy Test PASSED" << endl;
 }
