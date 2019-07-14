@@ -57,31 +57,27 @@ OpenAddressedHashTable::~OpenAddressedHashTable()
 
 void OpenAddressedHashTable::destroy(void)
 {
-    for (int i = 0; size > 0 && i < keys; i++) {
-        if (table[i]) {
-            if (destroy_)
-                destroy_(table[i]);
-            table[i] = nullptr;
-            size--;
-        }
+    for (int i = 0; i < keys; i++) {
+        if (table[i] != empty && table[i] && destroy_)
+            destroy_(table[i]);
+        table[i] = nullptr;
     }
+    size = 0;
 }
 
 void OpenAddressedHashTable::destroy(destroy_t destroy)
 {
-    for (int i = 0; size > 0 && i < keys; i++) {
-        if (table[i]) {
-            if (destroy)
-                destroy(table[i]);
-            table[i] = nullptr;
-            size--;
-        }
+    for (int i = 0; i < keys; i++) {
+        if (table[i] != empty && table[i] && destroy)
+            destroy(table[i]);
+        table[i] = nullptr;
     }
+    size = 0;
 }
 
 bool OpenAddressedHashTable::insert(void* data)
 {
-    if ( data == nullptr || lookup(data) )
+    if ( data == nullptr || size == keys || lookup(data) )
         return false;
 
     for (int i = 0, index; i < keys; i++) {
@@ -105,10 +101,6 @@ void* OpenAddressedHashTable::remove(void* data)
             table[index] = empty;
             size--;
 
-            i++;
-            if (i == keys || table[getIndex(data, i)] == nullptr)
-                table[index] = nullptr;
-
             return d;
         }
 
@@ -127,7 +119,7 @@ void* OpenAddressedHashTable::lookup(void* data)
         if (table[index] == nullptr)
             return nullptr;
 
-        if ( match(table[index], data) )
+        if ( table[index] != empty && match(table[index], data) )
             return table[index];
     }
 
