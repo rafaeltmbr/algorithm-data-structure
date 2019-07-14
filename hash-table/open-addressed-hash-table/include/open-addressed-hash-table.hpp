@@ -10,10 +10,11 @@ protected:
     int keys;
     int size;
     void **table;
-    int *maxInteration;
+    void *empty;
     match_t match;
     destroy_t destroy_;
     hash_t hash1, hash2;
+    int getIndex(void *data, int i);
 public:
     OpenAddressedHashTable(
         int keys,

@@ -1,5 +1,12 @@
 #include "../include/open-addressed-hash-table.hpp"
 
+int OpenAddressedHashTable::getIndex(void* data, int i)
+{
+    return (hash1 && hash2)
+        ? (hash1(data, keys) + i * hash2(data, keys)) % keys
+        : -1;
+}
+
 OpenAddressedHashTable::OpenAddressedHashTable(
     int keys,
     hash_t hash1,
@@ -17,12 +24,10 @@ OpenAddressedHashTable::OpenAddressedHashTable(
     if (keys < 1)
         this->keys = 23;
 
+    empty = &empty;
     table = new void*[keys];
-    maxInteration = new int[keys];
-    for (int i = 0; i < keys; i++) {
+    for (int i = 0; i < keys; i++)
         table[i] = nullptr;
-        maxInteration[i] = 0;
-    }
 }
 
 OpenAddressedHashTable::OpenAddressedHashTable(OpenAddressedHashTable& ohtable)
@@ -33,12 +38,11 @@ OpenAddressedHashTable::OpenAddressedHashTable(OpenAddressedHashTable& ohtable)
     match = ohtable.match;
     destroy_ = ohtable.destroy_;
 
+    empty = &empty;
     table = new void*[keys];
-    maxInteration = new int[keys];
-    for (int i = 0; i < keys; i++) {
+    for (int i = 0; i < keys; i++)
         table[i] = ohtable.table[i];
-        maxInteration[i] = ohtable.maxInteration[i];
-    }
+
     size = ohtable.size;
 }
 
@@ -49,7 +53,6 @@ OpenAddressedHashTable::~OpenAddressedHashTable()
     match = nullptr;
     destroy_ = nullptr;
     delete[] table;
-    delete[] maxInteration;
 }
 
 void OpenAddressedHashTable::destroy(void)
@@ -59,7 +62,6 @@ void OpenAddressedHashTable::destroy(void)
             if (destroy_)
                 destroy_(table[i]);
             table[i] = nullptr;
-            maxInteration[i] = 0;
             size--;
         }
     }
@@ -72,7 +74,6 @@ void OpenAddressedHashTable::destroy(destroy_t destroy)
             if (destroy)
                 destroy(table[i]);
             table[i] = nullptr;
-            maxInteration[i] = 0;
             size--;
         }
     }
@@ -83,14 +84,9 @@ bool OpenAddressedHashTable::insert(void* data)
     if (lookup(data))
         return false;
 
-    int &max = maxInteration[hash1(data, keys) % keys];
-
     for (int i = 0, index; i < keys; i++) {
-        if (i > max)
-            max = i;
-
-        index = (hash1(data, keys) + i * hash2(data, keys)) % keys;
-        if (table[index] == nullptr) {
+        index = getIndex(data, i);
+        if (table[index] == nullptr || table[index] == empty) {
             table[index] = data;
             size++;
             return true;
@@ -101,39 +97,33 @@ bool OpenAddressedHashTable::insert(void* data)
 
 void* OpenAddressedHashTable::remove(void* data)
 {
-    void* d = nullptr;
-    int prevMax = 0;
-    int &max = maxInteration[hash1(data, keys) % keys];
-
     for (int i = 0, index; i < keys; i++) {
-        index = (hash1(data, keys) + i * hash2(data, keys)) % keys;
-        
+        index = getIndex(data, i);
+
         if (match(table[index], data)) {
-            d = table[index];
-            table[index] = nullptr;
+            void* d = table[index];
+            table[index] = empty;
             size--;
 
-            if (i == max)
-                max = prevMax;
+            i++;
+            if (i == keys || table[getIndex(data, i)] == nullptr)
+                table[index] = nullptr;
 
             return d;
         }
-
-        if (table[index])
-            prevMax = i;
     }
 
-    return d;
+    return nullptr;
 }
 
 void* OpenAddressedHashTable::lookup(void* data)
 {
-    int &max = maxInteration[hash1(data, keys) % keys];
-
-    for (int i = 0, index; i < keys && i <= max; i++) {
-        index = (hash1(data, keys) + i * hash2(data, keys)) % keys;
+    for (int i = 0, index; i < keys; i++) {
+        index = getIndex(data, i);
         if (match(table[index], data))
             return table[index];
+        if (table[index] == nullptr)
+            return nullptr;
     }
 
     return nullptr;
