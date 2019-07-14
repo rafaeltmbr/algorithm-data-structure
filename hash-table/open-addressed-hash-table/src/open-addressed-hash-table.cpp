@@ -111,6 +111,9 @@ void* OpenAddressedHashTable::remove(void* data)
 
             return d;
         }
+
+        if (table[index] == nullptr)
+            return nullptr;
     }
 
     return nullptr;
