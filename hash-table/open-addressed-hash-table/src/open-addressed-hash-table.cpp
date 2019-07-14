@@ -100,7 +100,6 @@ void* OpenAddressedHashTable::remove(void* data)
             void* d = table[index];
             table[index] = empty;
             size--;
-
             return d;
         }
 
