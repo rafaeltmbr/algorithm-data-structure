@@ -120,10 +120,12 @@ void* OpenAddressedHashTable::lookup(void* data)
 {
     for (int i = 0, index; i < keys; i++) {
         index = getIndex(data, i);
-        if (match(table[index], data))
-            return table[index];
+
         if (table[index] == nullptr)
             return nullptr;
+
+        if ( match(table[index], data) )
+            return table[index];
     }
 
     return nullptr;
