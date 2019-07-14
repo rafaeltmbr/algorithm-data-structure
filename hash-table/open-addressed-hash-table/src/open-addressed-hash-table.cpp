@@ -96,6 +96,9 @@ void* OpenAddressedHashTable::remove(void* data)
     for (int i = 0, index; i < keys; i++) {
         index = getIndex(data, i);
 
+        if (table[index] == nullptr)
+            return nullptr;
+            
         if (match(table[index], data)) {
             void* d = table[index];
             table[index] = empty;
@@ -103,8 +106,6 @@ void* OpenAddressedHashTable::remove(void* data)
             return d;
         }
 
-        if (table[index] == nullptr)
-            return nullptr;
     }
 
     return nullptr;
