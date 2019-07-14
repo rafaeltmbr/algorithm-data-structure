@@ -81,7 +81,7 @@ void OpenAddressedHashTable::destroy(destroy_t destroy)
 
 bool OpenAddressedHashTable::insert(void* data)
 {
-    if (lookup(data))
+    if ( data == nullptr || lookup(data) )
         return false;
 
     for (int i = 0, index; i < keys; i++) {
