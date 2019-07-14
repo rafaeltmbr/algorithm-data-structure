@@ -68,7 +68,7 @@ int hashMult(int key, int keys);
 int main()
 {
     cout << "-------------------- Chained Hash Table Testbench -----------------\n";
-    OpenAddressedHashTable ohtable(HASH_KEYS, hashFunc1, hashFunc2, matchName);
+    OpenAddressedHashTable ohtable(11, hashFunc1, hashFunc2, matchName);
     testContructor(ohtable);
     testInsertRemoveLookup(ohtable);
     testDestroy(ohtable);
