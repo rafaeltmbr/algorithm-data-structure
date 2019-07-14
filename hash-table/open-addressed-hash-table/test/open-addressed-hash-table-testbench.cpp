@@ -112,7 +112,7 @@ void testInsertRemoveLookup(OpenAddressedHashTable &ohtable)
         ASSERT(ohtable.remove(da+i), "interation(" << i << ") failed");
     ASSERT(ohtable.getSize() == 0, "table should be empty");
 
-    ohtable.destroy();
+    ASSERT(!ohtable.insert(nullptr), "insert() failed");
     ASSERT(ohtable.getSize() == 0, "table should be empty");
 
     cout << " Insert, Remove and Lookup Test PASSED" << endl;
