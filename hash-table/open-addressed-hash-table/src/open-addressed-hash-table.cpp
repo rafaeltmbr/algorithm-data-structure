@@ -98,8 +98,8 @@ void* OpenAddressedHashTable::remove(void* data)
 
         if (table[index] == nullptr)
             return nullptr;
-            
-        if (match(table[index], data)) {
+
+        if (table[index] != empty && match(table[index], data)) {
             void* d = table[index];
             table[index] = empty;
             size--;
