@@ -113,6 +113,9 @@ bool BinaryTree::isEndOfBranch(BitreeNode* node)
 
 void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 {
+    if (!callback)
+        return;
+        
     if (node)
         callback(node);
     else if (root)
@@ -147,7 +150,10 @@ void BinaryTree::scanPreorder(delete_node_t deleteFunc, BinaryTree* that, Bitree
 }
 
 void BinaryTree::scanInorder(callback_t callback, BitreeNode* node)
-{
+{    
+    if (!callback)
+        return;
+        
     if (node->left)
         scanPreorder(callback, node->left);
 
@@ -183,6 +189,9 @@ void BinaryTree::scanInorder(delete_node_t deleteFunc, BinaryTree* that, BitreeN
 
 void BinaryTree::scanPostorder(callback_t callback, BitreeNode* node)
 {
+    if (!callback)
+        return;
+
     if (node->left)
         scanPreorder(callback, node->left);
 
