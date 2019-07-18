@@ -113,15 +113,13 @@ bool BinaryTree::isEndOfBranch(BitreeNode* node)
 
 void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 {
-    if (!callback)
+    if ( !callback || !root )
         return;
-        
-    if (node)
-        callback(node);
-    else if (root)
-        callback(root);
-    else
-        return;
+
+    if (!node)
+        node = root;
+
+    callback(node);
 
     if (node->left)
         scanPreorder(callback, node->left);
@@ -132,15 +130,13 @@ void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 
 void BinaryTree::scanPreorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if (!deleteFunc)
+    if ( !deleteFunc || !root )
         return;
 
-    if (node)
-        deleteFunc(node, that);
-    else if (root)
-        deleteFunc(root, that);
-    else
-        return;
+    if (!node)
+        node = root;
+
+    deleteFunc(node, that);
 
     if (node->left)
         scanPreorder(deleteFunc, that, node->left);
@@ -151,18 +147,16 @@ void BinaryTree::scanPreorder(delete_node_t deleteFunc, BinaryTree* that, Bitree
 
 void BinaryTree::scanInorder(callback_t callback, BitreeNode* node)
 {    
-    if (!callback)
+    if ( !callback || !root )
         return;
+
+    if (!node)
+        node = root;
         
     if (node->left)
         scanPreorder(callback, node->left);
 
-    if (node)
-        callback(node);
-    else if (root)
-        callback(root);
-    else
-        return;
+    callback(node);
 
     if (node->right)
         scanPreorder(callback, node->right);
@@ -170,18 +164,16 @@ void BinaryTree::scanInorder(callback_t callback, BitreeNode* node)
 
 void BinaryTree::scanInorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if (!deleteFunc)
+    if ( !deleteFunc || !root )
         return;
- 
+
+    if (!node)
+        node = root;
+
     if (node->left)
         scanPreorder(deleteFunc, that, node->left);
 
-    if (node)
-        deleteFunc(node, that);
-    else if (root)
-        deleteFunc(root, that);
-    else
-        return;
+    deleteFunc(node, that);
 
     if (node->right)
         scanPreorder(deleteFunc, that, node->right);
@@ -189,8 +181,11 @@ void BinaryTree::scanInorder(delete_node_t deleteFunc, BinaryTree* that, BitreeN
 
 void BinaryTree::scanPostorder(callback_t callback, BitreeNode* node)
 {
-    if (!callback)
+    if ( !callback || !root )
         return;
+
+    if (!node)
+        node = root;
 
     if (node->left)
         scanPreorder(callback, node->left);
@@ -198,25 +193,22 @@ void BinaryTree::scanPostorder(callback_t callback, BitreeNode* node)
     if (node->right)
         scanPreorder(callback, node->right);
 
-    if (node)
-        callback(node);
-    else if (root)
-        callback(root);
+    callback(node);
 }
 
 void BinaryTree::scanPostorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if (!deleteFunc)
+    if ( !deleteFunc || !root )
         return;
- 
+
+    if (!node)
+        node = root;
+
     if (node->left)
         scanPreorder(deleteFunc, that, node->left);
-    
+
     if (node->right)
         scanPreorder(deleteFunc, that, node->right);
 
-    if (node)
-        deleteFunc(node, that);
-    else if (root)
-        deleteFunc(root, that);
+    deleteFunc(node, that);
 }
