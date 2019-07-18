@@ -50,12 +50,12 @@ public:
     void* getData(BitreeNode* node) { return node ? node->data : nullptr; };
     BitreeNode* getLeft(BitreeNode* node) { return node ? node->left : nullptr; };
     BitreeNode* getRight(BitreeNode* node) { return node ? node->right : nullptr; };
-    void scanPreorder(callback_t callback, BitreeNode* rootNode = nullptr);
-    void scanPreorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* rootNode = nullptr);
-    void scanInorder(callback_t callback, BitreeNode* rootNode = nullptr);
-    void scanInorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* rootNode = nullptr);
-    void scanPostorder(callback_t callback, BitreeNode* rootNode = nullptr);
-    void scanPostorder(delete_node_t deleteFunc, BinaryTree* that = nullptr,  BitreeNode* rootNode = nullptr);
+    void scanPreorder(callback_t callback, BitreeNode* node = nullptr);
+    void scanPreorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* node = nullptr);
+    void scanInorder(callback_t callback, BitreeNode* node = nullptr);
+    void scanInorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* node = nullptr);
+    void scanPostorder(callback_t callback, BitreeNode* node = nullptr);
+    void scanPostorder(delete_node_t deleteFunc, BinaryTree* that = nullptr,  BitreeNode* node = nullptr);
 };
 
 #endif // BINARY_TREE_HPP
