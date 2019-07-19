@@ -1,29 +1,46 @@
 #ifndef BINARY_SEARCH_TREE_HPP
 #define BINARY_SEARCH_TREE_HPP
 
-#include "binary-tree.hpp"
-
 typedef int (*compare_t)(const void* data1, const void* data2);
+typedef void (*destroy_t)(void* data);
 
-class BitreeSNode : public BitreeNode {
-public:
+class BitreeSNode {
+    BitreeSNode* left = nullptr;
+    BitreeSNode* right = nullptr;
     bool visible = true;
     int balance = 0;
-    BitreeSNode(void *data): BitreeNode(data) {}
+    friend class BinarySearchTree;
+public:
+    void* data = nullptr;
+    BitreeSNode(void* data_)
+        : data{ data_ } {};
 };
 
-class BinarySearchTree : public BinaryTree {
+class BinarySearchTree {
 protected:
-    compare_t compare;
+    int size = 0;
+    BitreeSNode* root = nullptr;
+    compare_t compare = nullptr;
+    destroy_t destroy_ = nullptr;
+    void deleteNodes(BitreeSNode **node);
+    BitreeSNode** getNode(void *data, BitreeSNode** entry = nullptr);
 
 public:
+    BinarySearchTree(compare_t compareFunc = nullptr, destroy_t destroyFunc = nullptr)
+        : compare{ compareFunc }
+        , destroy_{ destroyFunc } {};
+    ~BinarySearchTree() { destroy(); }
+    void destroy(void);
+    void setDestroy(destroy_t destroy) { destroy_ = destroy; }
+    void setCompare(compare_t compare) { this->compare = compare; }
+    bool merge(BinarySearchTree* tree1, BinarySearchTree* tree2);
+    bool deleteBranch(void* data);
     bool insert(void* data);
     bool remove(void* data);
     void* lookup(void* data);
-    bool insertLeft(BitreeNode* node, void* data) = delete;
-    bool insertRight(BitreeNode* node, void* data) = delete;
-    bool removeLeft(BitreeNode* node) = delete;
-    bool removeRight(BitreeNode* node) = delete;
+    int getSize(void) { return size; }
+    BitreeSNode* getRoot(void) { return root; }
+    static void* getData(BitreeSNode* node) { return node ? node->data : nullptr; }
 };
 
 #endif // BINARY_SEARCH_TREE_HPP
