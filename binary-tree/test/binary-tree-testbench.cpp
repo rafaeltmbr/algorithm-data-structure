@@ -259,6 +259,15 @@ void testScanPostorder(BinaryTree& bitree)
     });
 
     ASSERT(bitree.getSize() == 3, "getSize() failed");
+
+    ASSERT(bitree.removeRight(bitree.getRoot()), "removeRight() failed");
+
+    i=0;
+    bitree.scanPostorder([](BitreeNode* n)) {
+        i++;
+    });
+    ASSERT(i == 0, "scanPostorder() failed");
+
     bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
     cout << " PASSED\n";
