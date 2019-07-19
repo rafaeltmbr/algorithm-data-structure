@@ -132,11 +132,6 @@ bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)
     return size == left.size + right.size + 1;
 }
 
-bool BinaryTree::isEndOfBranch(BitreeNode* node)
-{
-    return false;
-}
-
 void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 {
     if (!callback || !root)
