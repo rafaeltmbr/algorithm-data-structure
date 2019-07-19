@@ -8,7 +8,6 @@ class BinaryTree;
 
 typedef void (*destroy_t)(void* data);
 typedef void (*callback_t)(BitreeNode* node);
-typedef void (*delete_node_t)(BitreeNode* node, BinaryTree* that);
 
 class BitreeNode {
 public:
@@ -30,6 +29,7 @@ protected:
 
 public:
     destroy_t destroy_ = nullptr;
+    int deleteCount = 0;
 
     BinaryTree(destroy_t destroy = nullptr)
         : destroy_{ destroy } {};
@@ -50,11 +50,8 @@ public:
     static BitreeNode* getLeft(BitreeNode* node) { return node ? node->left : nullptr; };
     static BitreeNode* getRight(BitreeNode* node) { return node ? node->right : nullptr; };
     void scanPreorder(callback_t callback, BitreeNode* node = nullptr);
-    void scanPreorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* node = nullptr);
     void scanInorder(callback_t callback, BitreeNode* node = nullptr);
-    void scanInorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* node = nullptr);
     void scanPostorder(callback_t callback, BitreeNode* node = nullptr);
-    void scanPostorder(delete_node_t deleteFunc, BinaryTree* that = nullptr,  BitreeNode* node = nullptr);
     BitreeNode* copyNodesRecursively(BitreeNode *node);
 };
 

@@ -16,9 +16,6 @@
 
 using namespace std;
 
-void assignValues(BinaryTree &bitree);
-void testCopyConstructor(BinaryTree &bitree);
-
 #define FAMILY_TREE_SIZE 7
 
 string familyTree[FAMILY_TREE_SIZE] = {
@@ -31,12 +28,19 @@ string familyTree[FAMILY_TREE_SIZE] = {
     "BR",  //      AL      AR      BL      BR
 };
 
+void assignValues(BinaryTree &bitree);
+void testCopyConstructor(BinaryTree &bitree);
+void testInsert(BinaryTree &bitree);
+void testRemove(BinaryTree &bitree);
+
 int main()
 {
     cout << "----------------------- Binary Tree Testbench -----------------------\n";
     BinaryTree bitree;
     assignValues(bitree);
     testCopyConstructor(bitree);
+    testInsert(bitree); 
+    testRemove(bitree); 
     cout << "------------------------ Testbench Succeed ------------------------" << endl;
 }
 
@@ -80,5 +84,50 @@ void testCopyConstructor(BinaryTree &bitree)
     ASSERT(copy.getRoot()->left->data == bitree.getRoot()->left->data, "data mismatch");
     ASSERT(copy.getRoot()->right->data == bitree.getRoot()->right->data, "data mismatch");
 
+    cout << " PASSED\n";
+}
+
+void testInsert(BinaryTree &bitree)
+{
+    cout << " Insert Test: ";
+
+    bitree.destroy();
+    ASSERT(bitree.getSize() == 0, "getSize() failed");
+
+    ASSERT(bitree.getRoot() == nullptr, "getRoot() failed");
+    ASSERT(bitree.insertLeft(bitree.getRoot(), familyTree), "insertLeft() failed");
+    ASSERT(bitree.getRoot()->data == familyTree, "data mismatch");
+
+    ASSERT(bitree.getRoot()->left == nullptr, "getRoot()->left failed");
+    ASSERT(bitree.insertLeft(bitree.getRoot(), familyTree+1), "insertLeft() failed");
+    ASSERT(bitree.getRoot()->left->data == familyTree+1, "data mismatch");
+
+    ASSERT(bitree.getRoot()->right == nullptr, "getRoot()->right failed");
+    ASSERT(bitree.insertRight(bitree.getRoot(), familyTree+2), "insertRight() failed");
+    ASSERT(bitree.getRoot()->right->data == familyTree+2, "data mismatch");
+
+    ASSERT(bitree.getSize() == 3, "getSize() failed");
+    cout << " PASSED\n";
+}
+
+void testRemove(BinaryTree &bitree)
+{
+    cout << " Remove Test: ";
+
+    ASSERT(bitree.getSize() == 3, "getSize() failed");
+
+    ASSERT(bitree.getRoot()->left->data == familyTree+1, "data mismatch");
+    ASSERT(bitree.removeLeft(bitree.getRoot()), "removeLeft() failed");
+    ASSERT(bitree.getRoot()->left == nullptr, "getRoot()->left failed");
+
+    ASSERT(bitree.getRoot()->right->data == familyTree+2, "data mismatch");
+    ASSERT(bitree.removeRight(bitree.getRoot()), "removeRight() failed");
+    ASSERT(bitree.getRoot()->right == nullptr, "getRoot()->right failed");
+
+    ASSERT(bitree.getRoot()->data == familyTree, "data mismatch");
+    ASSERT(bitree.removeLeft(nullptr), "removeLeft() failed");
+    ASSERT(bitree.getRoot() == nullptr, "getRoot() failed");
+
+    ASSERT(bitree.getSize() == 0, "getSize() failed");
     cout << " PASSED\n";
 }
