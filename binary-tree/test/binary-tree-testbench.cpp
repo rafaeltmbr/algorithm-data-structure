@@ -58,7 +58,7 @@ void assignValues(BinaryTree &bitree)
     ASSERT(bitree.insertLeft(temp, familyTree+5), "insertLeft() failed");
     ASSERT(bitree.insertRight(temp, familyTree+6), "insertRight() failed");
 
-    ASSERT(bitree.getRoot()->data == familyTree, "data mismatch");
+    ASSERT(bitree.getData( bitree.getRoot() ) == familyTree, "data mismatch");
     ASSERT(bitree.getData( bitree.getLeft( bitree.getRoot() ) ) == familyTree+1, "data mismatch");
     ASSERT(bitree.getData( bitree.getRight( bitree.getRoot() ) ) == familyTree+2, "data mismatch");
 
