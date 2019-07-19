@@ -35,7 +35,7 @@ void testRemove(BinaryTree &bitree);
 
 int main()
 {
-    cout << "----------------------- Binary Tree Testbench -----------------------\n";
+    cout << "---------------------- Binary Tree Testbench ----------------------\n";
     BinaryTree bitree;
     assignValues(bitree);
     testCopyConstructor(bitree);
