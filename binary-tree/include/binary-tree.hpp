@@ -28,7 +28,7 @@ protected:
     BitreeNode* root = nullptr;
     destroy_t destroy_ = nullptr;
     void deleteNodes(BitreeNode** node);
-    BitreeNode* copyNodes(BitreeNode *node);
+    BitreeNode* copyNodes(BitreeNode* node);
 
 public:
     BinaryTree(destroy_t destroy = nullptr)

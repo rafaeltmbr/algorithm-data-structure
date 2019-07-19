@@ -192,19 +192,19 @@ void testMerge(BinaryTree& bitree)
 void testScanPreorder(BinaryTree& bitree)
 {
     cout << " Scan Preorder Test: ";
-    static int test[] = {1, 2, 3};
-    static int ans[] = {1, 2, 3};
+    static int test[] = { 1, 2, 3 };
+    static int ans[] = { 1, 2, 3 };
     static int i = 0;
 
     bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
     ASSERT(bitree.insertLeft(bitree.getRoot(), test), "insertLeft() failed");
-    ASSERT(bitree.insertLeft(bitree.getRoot(), test+1), "insertLeft() failed");
-    ASSERT(bitree.insertRight(bitree.getRoot(), test+2), "insertRight() failed");
+    ASSERT(bitree.insertLeft(bitree.getRoot(), test + 1), "insertLeft() failed");
+    ASSERT(bitree.insertRight(bitree.getRoot(), test + 2), "insertRight() failed");
     ASSERT(bitree.getSize() == 3, "getSize() failed");
 
-    bitree.scanPreorder([](BitreeNode *n) {
-        ASSERT( *((int*) n->data) == ans[i], "scanPreorder() failed in loop: " << i);
+    bitree.scanPreorder([](BitreeNode* n) {
+        ASSERT(*((int*)n->data) == ans[i], "scanPreorder() failed in loop: " << i);
         i++;
     });
 
@@ -217,19 +217,19 @@ void testScanPreorder(BinaryTree& bitree)
 void testScanInorder(BinaryTree& bitree)
 {
     cout << " Scan Inorder Test: ";
-    static int test[] = {1, 2, 3};
-    static int ans[] = {2, 1, 3};
+    static int test[] = { 1, 2, 3 };
+    static int ans[] = { 2, 1, 3 };
     static int i = 0;
 
     bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
     ASSERT(bitree.insertLeft(bitree.getRoot(), test), "insertLeft() failed");
-    ASSERT(bitree.insertLeft(bitree.getRoot(), test+1), "insertLeft() failed");
-    ASSERT(bitree.insertRight(bitree.getRoot(), test+2), "insertRight() failed");
+    ASSERT(bitree.insertLeft(bitree.getRoot(), test + 1), "insertLeft() failed");
+    ASSERT(bitree.insertRight(bitree.getRoot(), test + 2), "insertRight() failed");
     ASSERT(bitree.getSize() == 3, "getSize() failed");
 
-    bitree.scanInorder([](BitreeNode *n) {
-        ASSERT( *((int*) n->data) == ans[i], "scanInorder() failed in loop: " << i);
+    bitree.scanInorder([](BitreeNode* n) {
+        ASSERT(*((int*)n->data) == ans[i], "scanInorder() failed in loop: " << i);
         i++;
     });
 
@@ -242,19 +242,19 @@ void testScanInorder(BinaryTree& bitree)
 void testScanPostorder(BinaryTree& bitree)
 {
     cout << " Scan Postorder Test: ";
-    static int test[] = {1, 2, 3};
-    static int ans[] = {2, 3, 1};
+    static int test[] = { 1, 2, 3 };
+    static int ans[] = { 2, 3, 1 };
     static int i = 0;
 
     bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
     ASSERT(bitree.insertLeft(bitree.getRoot(), test), "insertLeft() failed");
-    ASSERT(bitree.insertLeft(bitree.getRoot(), test+1), "insertLeft() failed");
-    ASSERT(bitree.insertRight(bitree.getRoot(), test+2), "insertRight() failed");
+    ASSERT(bitree.insertLeft(bitree.getRoot(), test + 1), "insertLeft() failed");
+    ASSERT(bitree.insertRight(bitree.getRoot(), test + 2), "insertRight() failed");
     ASSERT(bitree.getSize() == 3, "getSize() failed");
 
-    bitree.scanPostorder([](BitreeNode *n) {
-        ASSERT( *((int*) n->data) == ans[i], "scanPostorder() failed in loop: " << i);
+    bitree.scanPostorder([](BitreeNode* n) {
+        ASSERT(*((int*)n->data) == ans[i], "scanPostorder() failed in loop: " << i);
         i++;
     });
 
@@ -271,10 +271,10 @@ void testDestroy(BinaryTree& bitree)
     bitree.destroy();
     assignFamilyTree(bitree);
     ASSERT(bitree.getSize() == FAMILY_TREE_SIZE, "getSize() failed");
-    
+
     static string s = "";
-    bitree.destroy([](void *d) {
-        s += *(string*) d;
+    bitree.destroy([](void* d) {
+        s += *(string*)d;
     });
 
     ASSERT(s == "ALARABLBRBG", "destroy() failed");
