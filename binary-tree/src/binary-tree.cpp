@@ -1,18 +1,29 @@
 #include "../include/binary-tree.hpp"
 
-static void newNodeCopy(BitreeNode* node)
+bool isNodeEqual(BitreeNode* node1, BitreeNode* node2)
 {
-    /* wrong! coping old node right and left references */
-    BitreeNode* copyNode = new BitreeNode(node->data);
-    copyNode->left = node->left;
-    copyNode->right = node->right;
+    return node1 && node2 && node1->data == node2->data
+        && node1->right == node2->right && node1->left == node2->left;
+}
+
+BitreeNode* BinaryTree::copyNodesRecursively(BitreeNode *node)
+{
+    if (!node)
+        return nullptr;
+
+    BitreeNode *n = new BitreeNode(node->data);
+
+    n->left = copyNodesRecursively(node->left);
+    n->right = copyNodesRecursively(node->right);
+    size++;
+
+    return n;
 }
 
 BinaryTree::BinaryTree(BinaryTree& bitree)
 {
-    scanPreorder(newNodeCopy);
+    root = copyNodesRecursively(bitree.root);
     destroy_ = bitree.destroy_;
-    root = bitree.root;
     size = bitree.size;
 }
 
@@ -96,14 +107,34 @@ bool BinaryTree::removeRight(BitreeNode* node)
     return true;
 }
 
-bool BinaryTree::merge(BinaryTree* root, BinaryTree* left, BinaryTree* right)
+bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)
 {
-    return false;
+    if (root)
+        return false;
+
+    root = new BitreeNode;
+    root->left = copyNodesRecursively(left.root);
+    root->right = copyNodesRecursively(right.root);
+    size++;
+
+    return size == left.size + right.size + 1;
 }
+
+static BitreeNode* containNode;
 
 bool BinaryTree::contain(BitreeNode* node)
 {
-    return false;
+    if (!node)
+        return false;
+
+    containNode = node;
+
+    scanPreorder([](BitreeNode* n) {
+        if (isNodeEqual(n, containNode))
+            containNode = nullptr;
+    });
+
+    return containNode == nullptr;
 }
 
 bool BinaryTree::isEndOfBranch(BitreeNode* node)
@@ -113,7 +144,7 @@ bool BinaryTree::isEndOfBranch(BitreeNode* node)
 
 void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 {
-    if ( !callback || !root )
+    if (!callback || !root)
         return;
 
     if (!node)
@@ -130,7 +161,7 @@ void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
 
 void BinaryTree::scanPreorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if ( !deleteFunc || !root )
+    if (!deleteFunc || !root)
         return;
 
     if (!node)
@@ -146,13 +177,13 @@ void BinaryTree::scanPreorder(delete_node_t deleteFunc, BinaryTree* that, Bitree
 }
 
 void BinaryTree::scanInorder(callback_t callback, BitreeNode* node)
-{    
-    if ( !callback || !root )
+{
+    if (!callback || !root)
         return;
 
     if (!node)
         node = root;
-        
+
     if (node->left)
         scanInorder(callback, node->left);
 
@@ -164,7 +195,7 @@ void BinaryTree::scanInorder(callback_t callback, BitreeNode* node)
 
 void BinaryTree::scanInorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if ( !deleteFunc || !root )
+    if (!deleteFunc || !root)
         return;
 
     if (!node)
@@ -181,7 +212,7 @@ void BinaryTree::scanInorder(delete_node_t deleteFunc, BinaryTree* that, BitreeN
 
 void BinaryTree::scanPostorder(callback_t callback, BitreeNode* node)
 {
-    if ( !callback || !root )
+    if (!callback || !root)
         return;
 
     if (!node)
@@ -198,7 +229,7 @@ void BinaryTree::scanPostorder(callback_t callback, BitreeNode* node)
 
 void BinaryTree::scanPostorder(delete_node_t deleteFunc, BinaryTree* that, BitreeNode* node)
 {
-    if ( !deleteFunc || !root )
+    if (!deleteFunc || !root)
         return;
 
     if (!node)

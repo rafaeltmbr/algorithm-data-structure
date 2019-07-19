@@ -41,7 +41,7 @@ public:
     bool insertRight(BitreeNode* node, void* data);
     bool removeLeft(BitreeNode* node);
     bool removeRight(BitreeNode* node);
-    bool merge(BinaryTree* root, BinaryTree* left, BinaryTree* right);
+    bool merge(BinaryTree& left, BinaryTree& right);
     unsigned int getSize(void) { return size; };
     BitreeNode* getRoot(void) { return root; };
     bool contain(BitreeNode* node);
@@ -56,6 +56,7 @@ public:
     void scanInorder(delete_node_t deleteFunc, BinaryTree* that = nullptr, BitreeNode* node = nullptr);
     void scanPostorder(callback_t callback, BitreeNode* node = nullptr);
     void scanPostorder(delete_node_t deleteFunc, BinaryTree* that = nullptr,  BitreeNode* node = nullptr);
+    BitreeNode* copyNodesRecursively(BitreeNode *node);
 };
 
 #endif // BINARY_TREE_HPP
