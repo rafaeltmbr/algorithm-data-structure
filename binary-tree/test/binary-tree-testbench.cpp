@@ -263,10 +263,10 @@ void testScanPostorder(BinaryTree& bitree)
     ASSERT(bitree.removeRight(bitree.getRoot()), "removeRight() failed");
 
     i=0;
-    bitree.scanPostorder([](BitreeNode* n)) {
+    bitree.scanPostorder([](BitreeNode* n) {
         i++;
     });
-    ASSERT(i == 0, "scanPostorder() failed");
+    ASSERT(i == 2, "scanPostorder() failed");
 
     bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
