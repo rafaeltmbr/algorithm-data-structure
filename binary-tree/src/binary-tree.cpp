@@ -60,10 +60,12 @@ void BinaryTree::destroy(destroy_t destroy)
 bool BinaryTree::insertLeft(BitreeNode* node, void* data)
 {
     if ((!node && !root) || (node && !node->left)) {
+
         if (!node)
-            root = node->left;
+            root = new BitreeNode(data);
         else
             node->left = new BitreeNode(data);
+        size++;
         return true;
     }
 
@@ -74,9 +76,10 @@ bool BinaryTree::insertRight(BitreeNode* node, void* data)
 {
     if ((!node && !root) || (node && !node->right)) {
         if (!node)
-            root = node->right;
+            root = new BitreeNode(data);
         else
             node->right = new BitreeNode(data);
+        size++;
         return true;
     }
 
@@ -120,23 +123,6 @@ bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)
     size++;
 
     return size == left.size + right.size + 1;
-}
-
-static BitreeNode* containNode;
-
-bool BinaryTree::contain(BitreeNode* node)
-{
-    if (!node)
-        return false;
-
-    containNode = node;
-
-    scanPreorder([](BitreeNode* n) {
-        if (isNodeEqual(n, containNode))
-            containNode = nullptr;
-    });
-
-    return containNode == nullptr;
 }
 
 bool BinaryTree::isEndOfBranch(BitreeNode* node)
