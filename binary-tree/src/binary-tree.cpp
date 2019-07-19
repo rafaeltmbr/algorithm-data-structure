@@ -36,9 +36,9 @@ BinaryTree::~BinaryTree(void)
     destroy_ = nullptr;
 }
 
-void destroyDataDeleteNode(BitreeNode** node, BinaryTree* that)
+void BinaryTree::destroyDataDeleteNode(BitreeNode** node)
 {
-    if (!node || !that)
+    if (!node)
         return;
 
     BitreeNode *element = *node;
@@ -46,24 +46,22 @@ void destroyDataDeleteNode(BitreeNode** node, BinaryTree* that)
         return;
 
     if (element->left)
-        destroyDataDeleteNode(&element->left, that);
+        destroyDataDeleteNode(&element->left);
 
     if (element->right)
-        destroyDataDeleteNode(&element->right, that);
+        destroyDataDeleteNode(&element->right);
 
-    if (that->destroy_)
-        that->destroy_(element->data);
+    if (destroy_)
+        destroy_(element->data);
     delete element;
 
     *node = nullptr;
-    that->deleteCount++;
+    size--;
 }
 
 void BinaryTree::destroy(void)
 {
-    deleteCount = 0;
-    destroyDataDeleteNode(&root, this);
-    size -= deleteCount;
+    destroyDataDeleteNode(&root);
     destroy_ = nullptr;
     root = nullptr;
 }
@@ -105,36 +103,28 @@ bool BinaryTree::insertRight(BitreeNode* node, void* data)
 
 bool BinaryTree::removeLeft(BitreeNode* node)
 {
-    deleteCount = 0;
-
     if (node) {
         if (!node->left)
             return false;
-        destroyDataDeleteNode(&node->left, this);
+        destroyDataDeleteNode(&node->left);
     } else {
-        destroyDataDeleteNode(&root, this);
+        destroyDataDeleteNode(&root);
     }
 
-    size -= deleteCount;
-
-    return deleteCount > 0 && size >= 0;
+    return size >= 0;
 }
 
 bool BinaryTree::removeRight(BitreeNode* node)
 {
-    deleteCount = 0;
-
     if (node) {
         if (!node->right)
             return false;
-        destroyDataDeleteNode(&node->right, this);
+        destroyDataDeleteNode(&node->right);
     } else {
-        destroyDataDeleteNode(&root, this);
+        destroyDataDeleteNode(&root);
     }
-
-    size -= deleteCount;
-
-    return deleteCount > 0 && size >= 0;
+    
+    return size >= 0;
 }
 
 bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)

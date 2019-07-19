@@ -76,7 +76,6 @@ void testCopyConstructor(BinaryTree &bitree)
     cout << " Copy Constructor Test: ";
     BinaryTree copy(bitree);
     ASSERT(copy.getSize() == bitree.getSize(), "getSize() failed");
-    ASSERT(copy.destroy_ == bitree.destroy_, "destroy_ mismatch");
     ASSERT(copy.getRoot()->data == bitree.getRoot()->data, "getRoot() failed");
     ASSERT(copy.getRoot() != bitree.getRoot(), "roots evaluate to the same address");
     ASSERT(copy.getRoot()->left != bitree.getRoot()->left, "roots->left evaluate to the same address");

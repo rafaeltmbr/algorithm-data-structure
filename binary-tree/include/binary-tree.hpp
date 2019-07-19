@@ -26,11 +26,10 @@ class BinaryTree {
 protected:
     unsigned int size = 0;
     BitreeNode* root = nullptr;
+    destroy_t destroy_ = nullptr;
+    void destroyDataDeleteNode(BitreeNode** node);
 
 public:
-    destroy_t destroy_ = nullptr;
-    int deleteCount = 0;
-
     BinaryTree(destroy_t destroy = nullptr)
         : destroy_{ destroy } {};
     BinaryTree(BinaryTree& bitree);
