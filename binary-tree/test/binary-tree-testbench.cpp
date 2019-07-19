@@ -165,15 +165,15 @@ void testMerge(BinaryTree& bitree)
     ASSERT(t2.getSize() == 3, "getSize() failed");
 
     ASSERT(bitree.merge(t1, t2), "merge() failed");
-    ASSERT(bitree.getSize() == (t1.getSize() + t2.getSize() + 1), "getSize() failed");
+    ASSERT(bitree.getSize() == 7, "getSize() failed");
     ASSERT(bitree.getRoot()->data == nullptr, "getRoot()->data failed");
 
-    ASSERT(t1.getSize() == 3, "getSize() failed");
-    ASSERT(t2.getSize() == 3, "getSize() failed");
-    t1.destroy();
-    t2.destroy();
     ASSERT(t1.getSize() == 0, "getSize() failed");
     ASSERT(t2.getSize() == 0, "getSize() failed");
+    ASSERT(t1.getRoot() == nullptr, "getRoot() failed");
+    ASSERT(t2.getRoot() == nullptr, "getRoot() failed");
+    t1.destroy();
+    t2.destroy();
     ASSERT(bitree.getSize() == 7, "getSize() failed");
 
     BitreeNode* temp = bitree.getRoot()->left;

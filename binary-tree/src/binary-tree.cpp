@@ -125,11 +125,19 @@ bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)
         return false;
 
     root = new BitreeNode;
-    root->left = copyNodes(left.root);
-    root->right = copyNodes(right.root);
-    size++;
+    root->left = left.root;
+    root->right = right.root;
+    size = left.size + right.size + 1;
 
-    return size == left.size + right.size + 1;
+    left.root = nullptr;
+    left.size = 0;
+    left.destroy_ = nullptr;
+
+    right.root = nullptr;
+    right.size = 0;
+    right.destroy_ = nullptr;
+
+    return true;
 }
 
 void BinaryTree::scanPreorder(callback_t callback, BitreeNode* node)
