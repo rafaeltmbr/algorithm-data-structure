@@ -27,7 +27,8 @@ protected:
     unsigned int size = 0;
     BitreeNode* root = nullptr;
     destroy_t destroy_ = nullptr;
-    void destroyDataDeleteNode(BitreeNode** node);
+    void deleteNodes(BitreeNode** node);
+    BitreeNode* copyNodes(BitreeNode *node);
 
 public:
     BinaryTree(destroy_t destroy = nullptr)
@@ -51,7 +52,6 @@ public:
     void scanPreorder(callback_t callback, BitreeNode* node = nullptr);
     void scanInorder(callback_t callback, BitreeNode* node = nullptr);
     void scanPostorder(callback_t callback, BitreeNode* node = nullptr);
-    BitreeNode* copyNodesRecursively(BitreeNode *node);
 };
 
 #endif // BINARY_TREE_HPP

@@ -1,22 +1,37 @@
 #include "../include/binary-tree.hpp"
 
-bool isNodeEqual(BitreeNode* node1, BitreeNode* node2)
+void BinaryTree::deleteNodes(BitreeNode** node)
 {
-    return node1 && node2
-        && node1->data == node2->data
-        && node1->right == node2->right
-        && node1->left == node2->left;
+    if (!node)
+        return;
+
+    BitreeNode* element = *node;
+    if (!element)
+        return;
+
+    if (element->left)
+        deleteNodes(&element->left);
+
+    if (element->right)
+        deleteNodes(&element->right);
+
+    if (destroy_)
+        destroy_(element->data);
+    delete element;
+
+    *node = nullptr;
+    size--;
 }
 
-BitreeNode* BinaryTree::copyNodesRecursively(BitreeNode *node)
+BitreeNode* BinaryTree::copyNodes(BitreeNode* node)
 {
     if (!node)
         return nullptr;
 
-    BitreeNode *n = new BitreeNode(node->data);
+    BitreeNode* n = new BitreeNode(node->data);
 
-    n->left = copyNodesRecursively(node->left);
-    n->right = copyNodesRecursively(node->right);
+    n->left = copyNodes(node->left);
+    n->right = copyNodes(node->right);
     size++;
 
     return n;
@@ -24,7 +39,7 @@ BitreeNode* BinaryTree::copyNodesRecursively(BitreeNode *node)
 
 BinaryTree::BinaryTree(BinaryTree& bitree)
 {
-    root = copyNodesRecursively(bitree.root);
+    root = copyNodes(bitree.root);
     destroy_ = bitree.destroy_;
     size = bitree.size;
 }
@@ -36,32 +51,9 @@ BinaryTree::~BinaryTree(void)
     destroy_ = nullptr;
 }
 
-void BinaryTree::destroyDataDeleteNode(BitreeNode** node)
-{
-    if (!node)
-        return;
-
-    BitreeNode *element = *node;
-    if (!element)
-        return;
-
-    if (element->left)
-        destroyDataDeleteNode(&element->left);
-
-    if (element->right)
-        destroyDataDeleteNode(&element->right);
-
-    if (destroy_)
-        destroy_(element->data);
-    delete element;
-
-    *node = nullptr;
-    size--;
-}
-
 void BinaryTree::destroy(void)
 {
-    destroyDataDeleteNode(&root);
+    deleteNodes(&root);
     destroy_ = nullptr;
     root = nullptr;
 }
@@ -106,9 +98,9 @@ bool BinaryTree::removeLeft(BitreeNode* node)
     if (node) {
         if (!node->left)
             return false;
-        destroyDataDeleteNode(&node->left);
+        deleteNodes(&node->left);
     } else {
-        destroyDataDeleteNode(&root);
+        deleteNodes(&root);
     }
 
     return size >= 0;
@@ -119,11 +111,11 @@ bool BinaryTree::removeRight(BitreeNode* node)
     if (node) {
         if (!node->right)
             return false;
-        destroyDataDeleteNode(&node->right);
+        deleteNodes(&node->right);
     } else {
-        destroyDataDeleteNode(&root);
+        deleteNodes(&root);
     }
-    
+
     return size >= 0;
 }
 
@@ -133,8 +125,8 @@ bool BinaryTree::merge(BinaryTree& left, BinaryTree& right)
         return false;
 
     root = new BitreeNode;
-    root->left = copyNodesRecursively(left.root);
-    root->right = copyNodesRecursively(right.root);
+    root->left = copyNodes(left.root);
+    root->right = copyNodes(right.root);
     size++;
 
     return size == left.size + right.size + 1;

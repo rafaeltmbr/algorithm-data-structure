@@ -82,6 +82,10 @@ void testCopyConstructor(BinaryTree &bitree)
     ASSERT(copy.getRoot()->right != bitree.getRoot()->right, "roots->right evaluate to the same address");
     ASSERT(copy.getRoot()->left->data == bitree.getRoot()->left->data, "data mismatch");
     ASSERT(copy.getRoot()->right->data == bitree.getRoot()->right->data, "data mismatch");
+    
+    bitree.destroy();
+    ASSERT(bitree.getSize() == 0, "getSize() failed");
+    ASSERT(copy.getSize() == FAMILY_TREE_SIZE, "getSize() failed");
 
     cout << " PASSED\n";
 }
@@ -89,8 +93,6 @@ void testCopyConstructor(BinaryTree &bitree)
 void testInsert(BinaryTree &bitree)
 {
     cout << " Insert Test: ";
-
-    bitree.destroy();
     ASSERT(bitree.getSize() == 0, "getSize() failed");
 
     ASSERT(bitree.getRoot() == nullptr, "getRoot() failed");
