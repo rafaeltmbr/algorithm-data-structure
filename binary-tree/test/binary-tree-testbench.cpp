@@ -29,7 +29,7 @@ string familyTree[FAMILY_TREE_SIZE] = {
     "BR", //      AL      AR      BL      BR
 };
 
-void assignValues(BinaryTree& bitree);
+void assignFamilyTree(BinaryTree& bitree);
 void testCopyConstructor(BinaryTree& bitree);
 void testInsert(BinaryTree& bitree);
 void testRemove(BinaryTree& bitree);
@@ -43,7 +43,6 @@ int main()
 {
     cout << "---------------------- Binary Tree Testbench ----------------------\n";
     BinaryTree bitree;
-    assignValues(bitree);
     testCopyConstructor(bitree);
     testInsert(bitree);
     testRemove(bitree);
@@ -55,7 +54,7 @@ int main()
     cout << "------------------------ Testbench Succeed ------------------------" << endl;
 }
 
-void assignValues(BinaryTree& bitree)
+void assignFamilyTree(BinaryTree& bitree)
 {
     ASSERT(bitree.getSize() == 0, "getSize() failed");
     ASSERT(bitree.insertLeft(nullptr, familyTree), "insertLeft() failed");
@@ -81,6 +80,11 @@ void assignValues(BinaryTree& bitree)
 void testCopyConstructor(BinaryTree& bitree)
 {
     cout << " Copy Constructor Test: ";
+
+    ASSERT(bitree.getSize() == 0, "getSize() failed");
+    assignFamilyTree(bitree);
+    ASSERT(bitree.getSize() == FAMILY_TREE_SIZE, "getSize() failed");
+
     BinaryTree copy(bitree);
     ASSERT(copy.getSize() == bitree.getSize(), "getSize() failed");
     ASSERT(copy.getRoot()->data == bitree.getRoot()->data, "getRoot() failed");
@@ -265,7 +269,7 @@ void testDestroy(BinaryTree& bitree)
     cout << " Destroy test: ";
 
     bitree.destroy();
-    assignValues(bitree);
+    assignFamilyTree(bitree);
     ASSERT(bitree.getSize() == FAMILY_TREE_SIZE, "getSize() failed");
     
     static string s = "";
