@@ -37,6 +37,7 @@ public:
     ~BinaryTree();
     void destroy(void);
     void destroy(destroy_t destroy);
+    void setDestroy(destroy_t destroy) {destroy_ = destroy; }
     bool insertLeft(BitreeNode* node, void* data);
     bool insertRight(BitreeNode* node, void* data);
     bool removeLeft(BitreeNode* node);
