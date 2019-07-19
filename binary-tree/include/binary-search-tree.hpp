@@ -23,7 +23,7 @@ protected:
     compare_t compare = nullptr;
     destroy_t destroy_ = nullptr;
     void deleteNodes(BitreeSNode **node);
-    BitreeSNode** getNode(void *data, BitreeSNode** entry = nullptr);
+    BitreeSNode** getNode(void *data, BitreeSNode** entry);
 
 public:
     BinarySearchTree(compare_t compareFunc = nullptr, destroy_t destroyFunc = nullptr)
@@ -40,6 +40,7 @@ public:
     void* lookup(void* data);
     int getSize(void) { return size; }
     BitreeSNode* getRoot(void) { return root; }
+    BitreeSNode* getNode(void *data);
     static void* getData(BitreeSNode* node) { return node ? node->data : nullptr; }
 };
 

@@ -26,7 +26,7 @@ bool BinarySearchTree::deleteBranch(void* data)
     if (!root || !data || !compare)
         return false;
 
-    BitreeSNode** entry = getNode(data);
+    BitreeSNode** entry = getNode(data, &root);
     if (!entry)
         return false;
 
@@ -42,18 +42,26 @@ BitreeSNode** BinarySearchTree::getNode(void* data, BitreeSNode** entry)
     if (!entry || !*entry)
         entry = &root;
 
-    if (compare(data, (*entry)->data) == 0)
+    BitreeSNode *element = *entry;
+
+    if (compare(data, &element->data) == 0)
         return entry;
 
-    if (!(*entry)->right)
-        if (!getNode(data, &(*entry)->right))
-            return &(*entry)->right;
+    if (!element->right)
+        if (!getNode(data, &element->right))
+            return &element->right;
 
-    if (!(*entry)->left)
-        if (!getNode(data, &(*entry)->left))
-            return &(*entry)->left;
+    if (!element->left)
+        if (!getNode(data, &element->left))
+            return &element->left;
 
     return nullptr;
+}
+
+BitreeSNode* BinarySearchTree::getNode(void* data)
+{
+    BitreeSNode** node = getNode(data, &root);
+    return node ? *node : nullptr;
 }
 
 bool BinarySearchTree::insert(void* data)
