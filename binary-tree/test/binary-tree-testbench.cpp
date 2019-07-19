@@ -33,6 +33,7 @@ void assignValues(BinaryTree& bitree);
 void testCopyConstructor(BinaryTree& bitree);
 void testInsert(BinaryTree& bitree);
 void testRemove(BinaryTree& bitree);
+void testMerge(BinaryTree& bitree);
 
 int main()
 {
@@ -42,6 +43,7 @@ int main()
     testCopyConstructor(bitree);
     testInsert(bitree);
     testRemove(bitree);
+    testMerge(bitree);
     cout << "------------------------ Testbench Succeed ------------------------" << endl;
 }
 
@@ -131,5 +133,50 @@ void testRemove(BinaryTree& bitree)
     ASSERT(bitree.getRoot() == nullptr, "getRoot() failed");
 
     ASSERT(bitree.getSize() == 0, "getSize() failed");
+    cout << " PASSED\n";
+}
+
+void testMerge(BinaryTree& bitree)
+{
+    cout << " Test Merge: ";
+    bitree.destroy();
+    ASSERT(bitree.getSize() == 0, "getSize() failed");
+
+    int i1[] = { 10, 11, 12 };
+    int i2[] = { 20, 21, 22 };
+
+    BinaryTree t1, t2;
+    ASSERT(t1.insertLeft(t1.getRoot(), i1), "insertLeft() failed");
+    ASSERT(t1.insertLeft(t1.getRoot(), i1 + 1), "insertLeft() failed");
+    ASSERT(t1.insertRight(t1.getRoot(), i1 + 2), "insertRight() failed");
+    ASSERT(t1.getSize() == 3, "getSize() failed");
+
+    ASSERT(t2.insertRight(t2.getRoot(), i2), "insertRight() failed");
+    ASSERT(t2.insertLeft(t2.getRoot(), i2 + 1), "insertLeft() failed");
+    ASSERT(t2.insertRight(t2.getRoot(), i2 + 2), "insertRight() failed");
+    ASSERT(t2.getSize() == 3, "getSize() failed");
+
+    ASSERT(bitree.merge(t1, t2), "merge() failed");
+    ASSERT(bitree.getSize() == (t1.getSize() + t2.getSize() + 1), "getSize() failed");
+    ASSERT(bitree.getRoot()->data == nullptr, "getRoot()->data failed");
+
+    ASSERT(t1.getSize() == 3, "getSize() failed");
+    ASSERT(t2.getSize() == 3, "getSize() failed");
+    t1.destroy();
+    t2.destroy();
+    ASSERT(t1.getSize() == 0, "getSize() failed");
+    ASSERT(t2.getSize() == 0, "getSize() failed");
+    ASSERT(bitree.getSize() == 7, "getSize() failed");
+
+    BitreeNode* temp = bitree.getRoot()->left;
+    ASSERT(temp->data == i1, "data mismatch");
+    ASSERT(temp->left->data == i1 + 1, "data mismatch");
+    ASSERT(temp->right->data == i1 + 2, "data mismatch");
+
+    temp = bitree.getRoot()->right;
+    ASSERT(temp->data == i2, "data mismatch");
+    ASSERT(temp->left->data == i2 + 1, "data mismatch");
+    ASSERT(temp->right->data == i2 + 2, "data mismatch");
+
     cout << " PASSED\n";
 }
