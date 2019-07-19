@@ -44,7 +44,7 @@ public:
     bool merge(BinaryTree& left, BinaryTree& right);
     unsigned int getSize(void) { return size; };
     BitreeNode* getRoot(void) { return root; };
-    bool isEndOfBranch(BitreeNode* node) { return !node};
+    bool isEndOfBranch(BitreeNode* node) { return !node; }
     bool isLeaf(BitreeNode* node) { return node && !node->left && !node->right; };
     static void* getData(BitreeNode* node) { return node ? node->data : nullptr; };
     static BitreeNode* getLeft(BitreeNode* node) { return node ? node->left : nullptr; };
