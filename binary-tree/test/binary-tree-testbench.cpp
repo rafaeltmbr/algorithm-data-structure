@@ -20,9 +20,9 @@ using namespace std;
 #define FAMILY_TREE_SIZE 7
 
 string familyTree[FAMILY_TREE_SIZE] = {
-    "G", //                  G
-    "A", //          ________|________
-    "B" //          |               |
+    "G", //                   G
+    "A", //           ________|________
+    "B" //            |               |
     "AL", //          A               B
     "AR", //      ____|____       ____|____
     "BL", //      |       |       |       |
