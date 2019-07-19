@@ -2,8 +2,10 @@
 
 bool isNodeEqual(BitreeNode* node1, BitreeNode* node2)
 {
-    return node1 && node2 && node1->data == node2->data
-        && node1->right == node2->right && node1->left == node2->left;
+    return node1 && node2
+        && node1->data == node2->data
+        && node1->right == node2->right
+        && node1->left == node2->left;
 }
 
 BitreeNode* BinaryTree::copyNodesRecursively(BitreeNode *node)
