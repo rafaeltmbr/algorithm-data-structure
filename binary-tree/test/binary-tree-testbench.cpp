@@ -22,7 +22,7 @@ using namespace std;
 string familyTree[FAMILY_TREE_SIZE] = {
     "G", //                   G
     "A", //           ________|________
-    "B" //            |               |
+    "B", //           |               |
     "AL", //          A               B
     "AR", //      ____|____       ____|____
     "BL", //      |       |       |       |
