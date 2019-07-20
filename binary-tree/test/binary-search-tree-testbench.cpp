@@ -22,6 +22,7 @@ void testConstructor(BinarySearchTree& bstree);
 void testInsertDeleteBranch(BinarySearchTree& bstree);
 void testDestroy(BinarySearchTree& bstree);
 int compareInt(const void* data1, const void* data2);
+void testBalance(BinarySearchTree& bstree);
 
 int main()
 {
@@ -31,6 +32,7 @@ int main()
     testInsertLookupRemove(bstree);
     testInsertDeleteBranch(bstree);
     testDestroy(bstree);
+    testBalance(bstree);
     cout << "------------------------ Testbench Succeed ------------------------" << endl;
 }
 
@@ -138,7 +140,7 @@ void testDestroy(BinarySearchTree& bstree)
     string s[] = { "That's", "all", "folks" };
 
     ASSERT(bstree.getSize() == 0, "getSize() failed");
-    
+
     bstree.setCompare([](const void* d1, const void* d2) {
         string s1 = *(string*)d1;
         string s2 = *(string*)d2;
@@ -147,12 +149,12 @@ void testDestroy(BinarySearchTree& bstree)
                                   : -1;
     });
     static string ans;
-    bstree.setDestroy([](void *s) {
-        ans += *(string*) s + " ";
+    bstree.setDestroy([](void* s) {
+        ans += *(string*)s + " ";
     });
 
-    ASSERT(bstree.insert(s+2), "insert() failed");
-    ASSERT(bstree.insert(s+1), "insert() failed");
+    ASSERT(bstree.insert(s + 2), "insert() failed");
+    ASSERT(bstree.insert(s + 1), "insert() failed");
     ASSERT(bstree.insert(s), "insert() failed");
     ASSERT(bstree.getSize() == 3, "getSize() failed");
 
@@ -160,6 +162,19 @@ void testDestroy(BinarySearchTree& bstree)
     bstree.destroy();
     ASSERT(ans == "That's all folks ", "destroy() failed");
     ASSERT(bstree.getSize() == 0, "getSize() failed");
+
+    cout << " PASSED\n";
+}
+
+void testBalance(BinarySearchTree& bstree)
+{
+    cout << " Balance Test: ";
+
+    ASSERT(bstree.getSize() == 0, "getSize() failed");
+    const int pSize = 5;
+    const int nSize = 7;
+    int p[pSize] = { 4, 3, 2, 1, 0 };
+    int n[nSize] = { -1, -2, -3, -4 };
 
     cout << " PASSED\n";
 }

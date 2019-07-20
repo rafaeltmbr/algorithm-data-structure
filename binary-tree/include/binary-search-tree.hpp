@@ -8,7 +8,7 @@ class BitreeSNode {
     BitreeSNode* left = nullptr;
     BitreeSNode* right = nullptr;
     bool visible = true;
-    int balance = 0;
+    int height = 1;
     friend class BinarySearchTree;
 
 public:
@@ -25,7 +25,13 @@ protected:
     destroy_t destroy_ = nullptr;
     void deleteNodes(BitreeSNode** node);
     BitreeSNode** getNode(void* data, BitreeSNode** entry);
-
+    int updateNodeHeight(void *data, BitreeSNode *node);
+    BitreeSNode* getUnbalacedNode(BitreeSNode *node);
+    void balanceSubtree(BitreeSNode *node);
+    void rotateLL(BitreeSNode *node);
+    void rotateLR(BitreeSNode *node);
+    void rotateRL(BitreeSNode *node);
+    void rotateRR(BitreeSNode *node);
 public:
     BinarySearchTree(compare_t compareFunc = nullptr, destroy_t destroyFunc = nullptr)
         : compare{ compareFunc }
@@ -41,6 +47,7 @@ public:
     bool remove(void* data);
     void* lookup(void* data);
     int getSize(void) { return size; }
+    int getHeight(void) { return root ? root->height : 0; }
     BitreeSNode* getRoot(void) { return root; }
     BitreeSNode* getNode(void* data);
     static void* getData(BitreeSNode* node) { return node ? node->data : nullptr; }
