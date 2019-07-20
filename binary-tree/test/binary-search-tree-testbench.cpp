@@ -19,10 +19,9 @@ using namespace std;
 
 void testInsertLookupRemove(BinarySearchTree& bstree);
 void testConstructor(BinarySearchTree& bstree);
-int compareInt(const void* data1, const void* data2)
-{
-    return (*(int*)data1) - (*(int*)data2);
-}
+void testInsertDeleteBranch(BinarySearchTree& bstree);
+void testDestroy(BinarySearchTree& bstree);
+int compareInt(const void* data1, const void* data2);
 
 int main()
 {
@@ -30,6 +29,8 @@ int main()
     BinarySearchTree bstree;
     testConstructor(bstree);
     testInsertLookupRemove(bstree);
+    testInsertDeleteBranch(bstree);
+    testDestroy(bstree);
     cout << "------------------------ Testbench Succeed ------------------------" << endl;
 }
 
@@ -91,4 +92,79 @@ void testInsertLookupRemove(BinarySearchTree& bstree)
     bstree.destroy();
     ASSERT(bstree.getSize() == 0, "getSize() failed");
     cout << " PASSED\n";
+}
+
+void testInsertDeleteBranch(BinarySearchTree& bstree)
+{
+    cout << " Insert and Delete Branch Test: ";
+    const int iSize1 = 7;
+    const int iSize2 = 4;
+    const int iSize3 = 3;
+
+    int i1[iSize1] = { 0, -1, -2, -3, 1, 2, 3 };
+    int i2[iSize2] = { 0, 2, 4, 6 };
+    int i3[iSize3] = { -1, -2, -3 };
+
+    bstree.setCompare(compareInt);
+    ASSERT(bstree.getSize() == 0, "getSize() failed");
+    for (int i = 0; i < iSize1; i++)
+        ASSERT(bstree.insert(i1 + i), "insert() failed in loop: " << i);
+    ASSERT(bstree.getSize() == iSize1, "getSize() failed");
+
+    BinarySearchTree evenTree(compareInt);
+    for (int i = 0; i < iSize2; i++)
+        ASSERT(evenTree.insert(i2 + i), "insert() failed in loop: " << i);
+    ASSERT(evenTree.getSize() == iSize2, "getSize() failed");
+
+    ASSERT(bstree.insertBranch(evenTree.getRoot()), "insertBranch() failed");
+    ASSERT(bstree.getSize() == 9, "getSize() failed");
+    for (int i = 0; i < iSize2; i++)
+        ASSERT(bstree.lookup(i2 + i), "lookup() failed in loop: " << i);
+
+    ASSERT(bstree.deleteBranch(i3), "deleteBranch() failed");
+    ASSERT(bstree.getSize() == 6, "getSize failed");
+    for (int i = 0; i < iSize3; i++)
+        ASSERT(!bstree.lookup(i3 + i), "lookup() failed in loop: " << i);
+
+    bstree.destroy();
+    ASSERT(bstree.getSize() == 0, "getSize() failed");
+
+    cout << " PASSED\n";
+}
+
+void testDestroy(BinarySearchTree& bstree)
+{
+    cout << " Destroy Test: ";
+    string s[] = { "That's", "all", "folks" };
+
+    ASSERT(bstree.getSize() == 0, "getSize() failed");
+    
+    bstree.setCompare([](const void* d1, const void* d2) {
+        string s1 = *(string*)d1;
+        string s2 = *(string*)d2;
+        return s1 == s2 ? 0
+                        : s1 > s2 ? s2 < s1
+                                  : -1;
+    });
+    static string ans;
+    bstree.setDestroy([](void *s) {
+        ans += *(string*) s + " ";
+    });
+
+    ASSERT(bstree.insert(s+2), "insert() failed");
+    ASSERT(bstree.insert(s+1), "insert() failed");
+    ASSERT(bstree.insert(s), "insert() failed");
+    ASSERT(bstree.getSize() == 3, "getSize() failed");
+
+    ASSERT(ans.length() == 0, "ans must be empty");
+    bstree.destroy();
+    ASSERT(ans == "That's all folks ", "destroy() failed");
+    ASSERT(bstree.getSize() == 0, "getSize() failed");
+
+    cout << " PASSED\n";
+}
+
+int compareInt(const void* data1, const void* data2)
+{
+    return (*(int*)data1) - (*(int*)data2);
 }

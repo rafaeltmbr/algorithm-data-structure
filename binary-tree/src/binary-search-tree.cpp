@@ -34,7 +34,7 @@ bool BinarySearchTree::deleteBranch(void* data)
         return false;
 
     BitreeSNode** entry = getNode(data, &root);
-    if (!entry)
+    if (!entry || !*entry || !(*entry)->data)
         return false;
 
     deleteNodes(entry);
@@ -57,26 +57,24 @@ BitreeSNode** BinarySearchTree::getNode(void* data, BitreeSNode** entry)
     if (!root || !data || !compare)
         return nullptr;
 
-    BitreeSNode* element = *entry;
-
-    if (compare(data, element->data) == 0)
+    if (!entry || !*entry)
         return entry;
 
-    if (element->left)
-        if (getNode(data, &element->left))
-            return &element->left;
+    BitreeSNode* element = *entry;
 
-    if (element->right)
-        if (getNode(data, &element->right))
-            return &element->right;
-
-    return nullptr;
+    int cmp = compare(data, element->data);
+    if (cmp == 0)
+        return entry;
+    else if (cmp < 0)
+        return getNode(data, &element->left);
+    else
+        return getNode(data, &element->right);
 }
 
 BitreeSNode* BinarySearchTree::getNode(void* data)
 {
     BitreeSNode** node = getNode(data, &root);
-    return node ? *node : nullptr;
+    return (node && *node && (*node)->data) ? *node : nullptr;
 }
 
 bool BinarySearchTree::insert(void* data)
@@ -84,26 +82,15 @@ bool BinarySearchTree::insert(void* data)
     if (!data)
         return false;
 
-    if (!root) {
-        root = new BitreeSNode(data);
-        size++;
-        return true;
-    }
+    BitreeSNode** n;
 
-    BitreeSNode** n = &root;
-    while (n && *n) {
-        int i = compare(data, (*n)->data);
-        if (i == 0) {
-            if ((*n)->visible)
-                return false;
-            (*n)->visible = true;
-            return true;
-        } else if (i < 0) {
-            n = &(*n)->left;
-        } else {
-            n = &(*n)->right;
-        }
-    }
+    if (root)
+        n = getNode(data, &root);
+    else
+        n = &root;
+
+    if (!n || (*n && (*n)->visible))
+        return false;
 
     *n = new BitreeSNode(data);
     size++;
