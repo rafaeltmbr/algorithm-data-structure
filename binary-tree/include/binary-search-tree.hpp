@@ -29,12 +29,14 @@ public:
     BinarySearchTree(compare_t compareFunc = nullptr, destroy_t destroyFunc = nullptr)
         : compare{ compareFunc }
         , destroy_{ destroyFunc } {};
+    BinarySearchTree(BinarySearchTree &bstree);
     ~BinarySearchTree() { destroy(); }
     void destroy(void);
     void setDestroy(destroy_t destroy) { destroy_ = destroy; }
     void setCompare(compare_t compare) { this->compare = compare; }
     bool merge(BinarySearchTree* tree1, BinarySearchTree* tree2);
     bool deleteBranch(void* data);
+    bool insertBranch(BitreeSNode* node);
     bool insert(void* data);
     bool remove(void* data);
     void* lookup(void* data);

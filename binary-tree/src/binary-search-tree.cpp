@@ -1,5 +1,12 @@
 #include "../include/binary-search-tree.hpp"
 
+BinarySearchTree::BinarySearchTree(BinarySearchTree& bstree)
+{
+    compare = bstree.compare;
+    destroy_ = bstree.destroy_;
+    insertBranch(bstree.root);
+}
+
 void BinarySearchTree::deleteNodes(BitreeSNode** node)
 {
     if (!node || !*node)
@@ -34,26 +41,34 @@ bool BinarySearchTree::deleteBranch(void* data)
     return true;
 }
 
+bool BinarySearchTree::insertBranch(BitreeSNode* node)
+{
+    if (!node)
+        return false;
+
+    insert(node->data);
+    insertBranch(node->left);
+    insertBranch(node->right);
+    return true;
+}
+
 BitreeSNode** BinarySearchTree::getNode(void* data, BitreeSNode** entry)
 {
     if (!root || !data || !compare)
         return nullptr;
 
-    if (!entry || !*entry)
-        entry = &root;
+    BitreeSNode* element = *entry;
 
-    BitreeSNode *element = *entry;
-
-    if (compare(data, &element->data) == 0)
+    if (compare(data, element->data) == 0)
         return entry;
 
-    if (!element->right)
-        if (!getNode(data, &element->right))
-            return &element->right;
-
-    if (!element->left)
-        if (!getNode(data, &element->left))
+    if (element->left)
+        if (getNode(data, &element->left))
             return &element->left;
+
+    if (element->right)
+        if (getNode(data, &element->right))
+            return &element->right;
 
     return nullptr;
 }
@@ -76,14 +91,18 @@ bool BinarySearchTree::insert(void* data)
     }
 
     BitreeSNode** n = &root;
-    while (n && *n && (*n)->visible) {
-        int i = compare((*n)->data, data);
-        if (i == 0)
-            return false;
-        else if (i < 0)
+    while (n && *n) {
+        int i = compare(data, (*n)->data);
+        if (i == 0) {
+            if ((*n)->visible)
+                return false;
+            (*n)->visible = true;
+            return true;
+        } else if (i < 0) {
             n = &(*n)->left;
-        else
+        } else {
             n = &(*n)->right;
+        }
     }
 
     *n = new BitreeSNode(data);
@@ -93,41 +112,18 @@ bool BinarySearchTree::insert(void* data)
 
 bool BinarySearchTree::remove(void* data)
 {
-    if (!root || !data)
+    BitreeSNode* n = getNode(data);
+    if (!n)
         return false;
 
-    BitreeSNode* n = root;
-    while (n && n->visible) {
-        int i = compare(n->data, data);
-        if (i == 0) {
-            n->visible = false;
-            return true;
-        } else if (i < 0)
-            n = n->left;
-        else
-            n = n->right;
-    }
-
-    return false;
+    n->visible = false;
+    return true;
 }
 
 void* BinarySearchTree::lookup(void* data)
 {
-    if (!root || !data)
-        return nullptr;
-
-    BitreeSNode* n = root;
-    while (n && n->visible) {
-        int i = compare(n->data, data);
-        if (i == 0)
-            return n->data;
-        else if (i < 0)
-            n = n->left;
-        else
-            n = n->right;
-    }
-
-    return nullptr;
+    BitreeSNode* n = getNode(data);
+    return (!n || !n->visible) ? nullptr : n->data;
 }
 
 void BinarySearchTree::destroy(void)
