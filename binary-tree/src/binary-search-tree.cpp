@@ -153,12 +153,7 @@ bool BinarySearchTree::insert(void* data)
     if (!data)
         return false;
 
-    BitreeSNode** n;
-
-    if (root)
-        n = getNode(data, &root);
-    else
-        n = &root;
+    BitreeSNode** n = root ? getNode(data, &root) : &root;
 
     if (!n || (*n && (*n)->visible))
         return false;
