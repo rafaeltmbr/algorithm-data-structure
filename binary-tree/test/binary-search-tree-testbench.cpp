@@ -101,11 +101,10 @@ void testInsertDeleteBranch(BinarySearchTree& bstree)
     cout << " Insert and Delete Branch Test: ";
     const int iSize1 = 7;
     const int iSize2 = 4;
-    const int iSize3 = 3;
+    //const int iSize3 = 3;
 
     int i1[iSize1] = { 0, -1, -2, -3, 1, 2, 3 };
     int i2[iSize2] = { 0, 2, 4, 6 };
-    int i3[iSize3] = { -1, -2, -3 };
 
     bstree.setCompare(compareInt);
     ASSERT(bstree.getSize() == 0, "getSize() failed");
@@ -123,13 +122,8 @@ void testInsertDeleteBranch(BinarySearchTree& bstree)
     for (int i = 0; i < iSize2; i++)
         ASSERT(bstree.lookup(i2 + i), "lookup() failed in loop: " << i);
 
-    ASSERT(bstree.deleteBranch(i3), "deleteBranch() failed");
-    ASSERT(bstree.getSize() == 6, "getSize failed");
-    for (int i = 0; i < iSize3; i++)
-        ASSERT(!bstree.lookup(i3 + i), "lookup() failed in loop: " << i);
-
-    bstree.destroy();
-    ASSERT(bstree.getSize() == 0, "getSize() failed");
+    ASSERT(bstree.deleteBranch(i1+1), "deleteBranch() failed");
+    ASSERT(bstree.getSize() == 0, "getSize failed: ");
 
     cout << " PASSED\n";
 }
@@ -137,7 +131,7 @@ void testInsertDeleteBranch(BinarySearchTree& bstree)
 void testDestroy(BinarySearchTree& bstree)
 {
     cout << " Destroy Test: ";
-    string s[] = { "That's", "all", "folks" };
+    string s[] = { "Congratulations", "Test", "Succeed" };
 
     ASSERT(bstree.getSize() == 0, "getSize() failed");
 
@@ -145,7 +139,7 @@ void testDestroy(BinarySearchTree& bstree)
         string s1 = *(string*)d1;
         string s2 = *(string*)d2;
         return s1 == s2 ? 0
-                        : s1 > s2 ? s2 < s1
+                        : s1 > s2 ? 1
                                   : -1;
     });
     static string ans;
@@ -160,7 +154,7 @@ void testDestroy(BinarySearchTree& bstree)
 
     ASSERT(ans.length() == 0, "ans must be empty");
     bstree.destroy();
-    ASSERT(ans == "That's all folks ", "destroy() failed");
+    ASSERT(ans == "Congratulations Test Succeed ", "destroy() failed: ");
     ASSERT(bstree.getSize() == 0, "getSize() failed");
 
     cout << " PASSED\n";
@@ -169,12 +163,18 @@ void testDestroy(BinarySearchTree& bstree)
 void testBalance(BinarySearchTree& bstree)
 {
     cout << " Balance Test: ";
+    bstree.setCompare(compareInt);
 
     ASSERT(bstree.getSize() == 0, "getSize() failed");
-    const int pSize = 5;
-    const int nSize = 7;
-    int p[pSize] = { 4, 3, 2, 1, 0 };
-    int n[nSize] = { -1, -2, -3, -4 };
+    const int pSize = 9;
+    int p[pSize] = { 20, 10, 0, 30, 40, -20, -10, 25, 22};
+    int expectedHeightP[pSize] = {1, 2, 2, 3, 3, 3, 3, 4, 4};
+
+    for (int i = 0; i < pSize; i++) {
+        bstree.insert(p + i);
+        ASSERT(bstree.getHeight() == expectedHeightP[i], "getHeight() failed in loop: " << i);
+    }
+    ASSERT(bstree.getSize() == pSize, "getSize() failed");
 
     cout << " PASSED\n";
 }

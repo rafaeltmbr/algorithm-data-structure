@@ -88,7 +88,7 @@ int BinarySearchTree::updateNodeHeight(void* data, BitreeSNode* node)
 
     int leftHeight, rightHeight;
 
-    if (cmp > 1) {
+    if (cmp > 0) {
         leftHeight = node->left ? node->left->height : 0;
         rightHeight = updateNodeHeight(data, node->right);
     } else {
@@ -100,54 +100,73 @@ int BinarySearchTree::updateNodeHeight(void* data, BitreeSNode* node)
     return node->height;
 }
 
-BitreeSNode* BinarySearchTree::getUnbalacedNode(BitreeSNode* node)
+int BinarySearchTree::updateEveryNodeHeight(BitreeSNode* node)
 {
-    if (!node)
+    if (!node || !compare)
+        return 0;
+
+    int leftHeight = updateEveryNodeHeight(node->left);
+    int rightHeight = updateEveryNodeHeight(node->right);
+
+    node->height = (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+    return node->height;
+}
+
+BitreeSNode* BinarySearchTree::getUnbalacedNode(void* data, BitreeSNode* node)
+{
+    if (!node || !data || node->data == data)
         return nullptr;
-    // all wrong !
+
+    BitreeSNode* next;
+    int cmp = compare(data, node->data);
+
+    if (cmp < 0 && (next = getUnbalacedNode(data, node->left)))
+        return next;
+
+    if (cmp > 0 && (next = getUnbalacedNode(data, node->right)))
+        return next;
+
     int leftHeight = node->left ? node->left->height : 0;
     int rightHeight = node->right ? node->right->height : 0;
     int diff = leftHeight - rightHeight;
     if (diff < -1 || diff > 1)
         return node;
 
-    if ((node = getUnbalacedNode(node->left)))
-        return node;
-
-    if ((node = getUnbalacedNode(node->right)))
-        return node;
-
     return nullptr;
 }
 
-void BinarySearchTree::balanceSubtree(BitreeSNode* node)
+void BinarySearchTree::balanceSubtree(void* data, BitreeSNode* node)
 {
-    if (!node)
+    if (!data || !node)
         return;
 
-    int diffL = 0, diffR = 0;
-    if (node->left) {
-        int subLL = node->left->left ? node->left->left->height : 0;
-        int subLR = node->left->right ? node->left->right->height : 0;
-        diffL = subLL - subLR;
-    }
+    BitreeSNode** prev = getNode(node->data, &root);
+    if (!prev)
+        prev = &root;
 
-    if (node->right) {
-        int subRL = node->right->left ? node->right->left->height : 0;
-        int subRR = node->right->right ? node->right->right->height : 0;
-        diffR = subRL - subRR;
-    }
+    int leftCompare = node->left ? compare(data, node->left->data) : 0;
+    int rightCompare = node->right ? compare(data, node->right->data) : 0;
 
-    if (diffL < -1)
-        rotateLL(node);
-    if (diffL > 1)
-        rotateLR(node);
-    if (diffR < -1)
-        rotateRL(node);
-    if (diffR > 1)
-        rotateRR(node);
+    if (leftCompare < 0)
+        rotateRight(node, prev);
+    else if (leftCompare > 0) {
+        rotateLeft(node->left, &node->left);
+        rotateRight(node, prev);
+    } else if (rightCompare < 0) {
+        rotateRight(node->right, &node->right);
+        rotateLeft(node, prev);
+    } else if (rightCompare > 0)
+        rotateLeft(node, prev);
 }
 
+void BinarySearchTree::keepAVLTree(void* data)
+{
+    updateNodeHeight(data, root);
+    BitreeSNode* unbalanced = getUnbalacedNode(data, root);
+    if (unbalanced)
+        balanceSubtree(data, unbalanced);
+    updateEveryNodeHeight(root);
+}
 bool BinarySearchTree::insert(void* data)
 {
     if (!data)
@@ -160,8 +179,8 @@ bool BinarySearchTree::insert(void* data)
 
     *n = new BitreeSNode(data);
     size++;
-    updateNodeHeight(data, root);
-    balanceSubtree(getUnbalacedNode(root));
+    keepAVLTree(data);
+
     return true;
 }
 
@@ -184,20 +203,32 @@ void* BinarySearchTree::lookup(void* data)
 void BinarySearchTree::destroy(void)
 {
     deleteNodes(&root);
+    compare = nullptr;
+    destroy_ = nullptr;
 }
 
-void BinarySearchTree::rotateLL(BitreeSNode* node)
+void BinarySearchTree::rotateRight(BitreeSNode* node, BitreeSNode** prev)
 {
+    if (!node || !node->left)
+        return;
+
+    BitreeSNode* leftTree = node->left;
+    node->left = leftTree->right;
+    leftTree->right = node;
+
+    if (prev)
+        *prev = leftTree;
 }
 
-void BinarySearchTree::rotateLR(BitreeSNode* node)
+void BinarySearchTree::rotateLeft(BitreeSNode* node, BitreeSNode** prev)
 {
-}
+    if (!node || !node->right)
+        return;
 
-void BinarySearchTree::rotateRL(BitreeSNode* node)
-{
-}
+    BitreeSNode* rightTree = node->right;
+    node->right = rightTree->left;
+    rightTree->left = node;
 
-void BinarySearchTree::rotateRR(BitreeSNode* node)
-{
+    if (prev)
+        *prev = rightTree;
 }

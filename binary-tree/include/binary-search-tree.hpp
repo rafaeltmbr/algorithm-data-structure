@@ -26,12 +26,12 @@ protected:
     void deleteNodes(BitreeSNode** node);
     BitreeSNode** getNode(void* data, BitreeSNode** entry);
     int updateNodeHeight(void *data, BitreeSNode *node);
-    BitreeSNode* getUnbalacedNode(BitreeSNode *node);
-    void balanceSubtree(BitreeSNode *node);
-    void rotateLL(BitreeSNode *node);
-    void rotateLR(BitreeSNode *node);
-    void rotateRL(BitreeSNode *node);
-    void rotateRR(BitreeSNode *node);
+    int updateEveryNodeHeight(BitreeSNode *node);
+    BitreeSNode* getUnbalacedNode(void *data, BitreeSNode *node);
+    void balanceSubtree(void* data, BitreeSNode* node);
+    void rotateLeft(BitreeSNode *node, BitreeSNode **prev);
+    void rotateRight(BitreeSNode *node, BitreeSNode **prev);
+    void keepAVLTree(void *data);
 public:
     BinarySearchTree(compare_t compareFunc = nullptr, destroy_t destroyFunc = nullptr)
         : compare{ compareFunc }
