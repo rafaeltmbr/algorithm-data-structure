@@ -1,5 +1,17 @@
 #include "../include/heap.hpp"
-#
+
+Heap::Heap(Heap& heap)
+{
+    size = heap.size;
+    blockSize = heap.blockSize;
+    allocatedSize = heap.allocatedSize;
+    compare = heap.compare;
+    destroy_ = heap.destroy_;
+    tree = new void*[allocatedSize];
+
+    for (unsigned int i=0; i < size-1; i++)
+        tree[i] = heap.tree[i];
+}
 
 void Heap::destroy(void)
 {
@@ -11,6 +23,8 @@ void Heap::destroy(void)
     }
 
     delete[] tree;
+    tree = nullptr;
+    size = 0;
     allocatedSize = 0;
     destroy_ = nullptr;
     compare = nullptr;
@@ -35,7 +49,7 @@ bool Heap::insert(void* data)
     }
 
     size++;
-    if (size > blockSize) {
+    if (size > allocatedSize) {
         allocatedSize += blockSize;
         void** newTree = new void*[allocatedSize];
         for (unsigned int i = 0; i < size - 1; i++)
@@ -114,7 +128,10 @@ int Heap::getGreaterChild(unsigned int index)
 
 void Heap::adjustGreaterPosition(unsigned int index)
 {
-    for (int i = index - 1, parentIndex; i > 0; i = parentIndex) {
+    if (index >= size)
+        return;
+
+    for (int i = index, parentIndex; i > 0; i = parentIndex) {
         parentIndex = getParentIndex(i);
         if (compare(tree[index], tree[parentIndex]) > 0)
             swap(tree[i], tree[parentIndex]);

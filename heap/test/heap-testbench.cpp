@@ -6,7 +6,7 @@
     if (cond)                                                                  \
         std::cout << "#";                                                      \
     else {                                                                     \
-        std::cerr << "Test failed (" << __LINE__ << "): " << msg << std::endl; \
+        std::cerr << "\n Test failed (" << __LINE__ << "): " << msg << std::endl; \
         exit(EXIT_FAILURE);                                                    \
     }
 
@@ -52,8 +52,6 @@ void testConstructor(Heap& heap)
     heap.destroy();
     ASSERT(heap.getSize() == 0, "getSize() failed");
     ASSERT(copy.getSize() == ARRAY_SIZE, "getSize() failed");
-
-    ASSERT(*(int*)heap[0] == 70, "heap greater element failed");
 
     cout << " PASSED\n";
 }

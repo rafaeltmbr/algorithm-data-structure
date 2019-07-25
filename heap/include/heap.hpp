@@ -17,6 +17,7 @@ public:
     Heap(compare_t cmp = nullptr, destroy_t destroy = nullptr)
         : compare{ cmp }
         , destroy_{ destroy } {};
+    Heap(Heap& heap);
     ~Heap() { destroy(); };
     void destroy(void);
     bool insert(void* data);
