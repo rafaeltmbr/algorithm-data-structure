@@ -12,6 +12,7 @@ protected:
     destroy_t destroy_ = nullptr;
     int getGreaterChild(unsigned int index);
     void adjustGreaterPosition(unsigned int index);
+    void reallocatedTree(unsigned int nodes);
 
 public:
     Heap(compare_t cmp = nullptr, destroy_t destroy = nullptr)
@@ -34,4 +35,4 @@ public:
     void* operator[](unsigned int index) { return index < size ? tree[index] : nullptr; }
 };
 
-#endif // HEAP_HPP#ifndef HE#ifndef HE
+#endif // HEAP_HPP

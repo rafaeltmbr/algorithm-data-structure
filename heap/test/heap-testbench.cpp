@@ -2,12 +2,12 @@
     g++ heap-testbench.cpp ../src/heap.cpp -g -Wall -std=c++14 -o heap.exe
 */
 
-#define ASSERT(cond, msg)                                                      \
-    if (cond)                                                                  \
-        std::cout << "#";                                                      \
-    else {                                                                     \
+#define ASSERT(cond, msg)                                                         \
+    if (cond)                                                                     \
+        std::cout << "#";                                                         \
+    else {                                                                        \
         std::cerr << "\n Test failed (" << __LINE__ << "): " << msg << std::endl; \
-        exit(EXIT_FAILURE);                                                    \
+        exit(EXIT_FAILURE);                                                       \
     }
 
 #include "../include/heap.hpp"
@@ -72,7 +72,7 @@ void testInsert(Heap& heap)
     ASSERT(heap.getSize() == ARRAY_SIZE, "getSize() failed");
     ASSERT(heap.getAllocatedSize() == 20, "getAllocatedSize() failed");
 
-    ASSERT(*(int*)heap[0] == 70, "heap greater element failed");
+    ASSERT(*(int*)heap[0] == 70, "heap greater element failed: ");
 
     for (int i = 0; i < ARRAY_SIZE - 1; i++)
         ASSERT(!heap.insert(intArray + i), "insert() failed on iteration " << i);
@@ -91,11 +91,15 @@ void testExtract(Heap& heap)
 
     ASSERT(heap.getSize() == ARRAY_SIZE, "getSize() failed");
 
-    ASSERT(*(int*)heap.extract(heap[0]) == 70, "extract() failed");
+    for (int i = 0, prev = 0, *current; i < ARRAY_SIZE; i++) {
+        ASSERT((current = (int*)heap.extract(heap[0])), "extract() failed on iteration " << i);
+        ASSERT(prev >= *(int*)current || i == 0, "previously extracted value should be greater or equal to"
+                                       " the current one. Interation: "
+                << i);
+        prev = *(int*)current;
+    }
 
-    for (int i = 0; i < ARRAY_SIZE - 1; i++)
-        ASSERT(heap.extract(intArray + i), "insert() failed on iteration " << i);
-    ASSERT(heap.getSize() == ARRAY_SIZE, "getSize() failed");
+    ASSERT(heap.getSize() == 0, "getSize() failed");
 
     heap.destroy();
     ASSERT(!heap.extract(intArray), "extract() failed");
@@ -118,8 +122,8 @@ void testDestroy(Heap& heap)
         return s1 == s2 ? 0 : s1 > s2 ? 1 : -1;
     });
 
-    const unsigned int arraySize = 3;
-    string stringArray[arraySize] = { "Congratulations", "Destruction", "Succeed" };
+    const unsigned int arraySize = 2;
+    string stringArray[arraySize] = { "Destruction", "Succeed" };
     static string answer;
 
     for (unsigned int i = 0; i < arraySize; i++)
@@ -129,7 +133,8 @@ void testDestroy(Heap& heap)
     heap.setDestroy([](void* data) {
         answer += *(string*)data + " ";
     });
-    ASSERT(answer == "Congratulations Destruction Succeed", "destroy() failed");
+    heap.destroy();
+    ASSERT(answer == "Destruction Succeed ", "destroy() failed");
 
     ASSERT(heap.getSize() == 0, "getSize() failed");
     ASSERT(heap.getAllocatedSize() == 0, "getAllocatedSize() failed");

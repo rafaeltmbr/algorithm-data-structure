@@ -9,7 +9,7 @@ Heap::Heap(Heap& heap)
     destroy_ = heap.destroy_;
     tree = new void*[allocatedSize];
 
-    for (unsigned int i=0; i < size-1; i++)
+    for (unsigned int i = 0; i < size - 1; i++)
         tree[i] = heap.tree[i];
 }
 
@@ -30,11 +30,11 @@ void Heap::destroy(void)
     compare = nullptr;
 }
 
-static void swap(void* data1, void* data2)
+static void swap(void** data1, void** data2)
 {
-    void* temp = data1;
-    data1 = data2;
-    data2 = temp;
+    void* temp = *data1;
+    *data1 = *data2;
+    *data2 = temp;
 }
 
 bool Heap::insert(void* data)
@@ -48,24 +48,17 @@ bool Heap::insert(void* data)
         return false;
     }
 
-    size++;
-    if (size > allocatedSize) {
-        allocatedSize += blockSize;
-        void** newTree = new void*[allocatedSize];
-        for (unsigned int i = 0; i < size - 1; i++)
-            newTree[i] = tree[i];
-        delete[] tree;
-        tree = newTree;
-    }
+    if (size + 1 > allocatedSize)
+        reallocatedTree(allocatedSize + blockSize);
 
-    tree[size - 1] = data;
+    tree[size++] = data;
     adjustGreaterPosition(size - 1);
     return true;
 }
 
 void* Heap::extract(void* data)
 {
-    if (!data || !compare)
+    if (!size || !data || !compare)
         return nullptr;
 
     int index = getIndex(data);
@@ -77,13 +70,14 @@ void* Heap::extract(void* data)
     unsigned int i, nextIndex;
     for (i = index; i < size - 1; i = nextIndex) {
         nextIndex = getGreaterChild(i);
-        if (nextIndex < 0)
+        if ((signed)nextIndex < 0)
             break;
-        swap(tree[index], tree[nextIndex]);
+        swap(tree + i, tree + nextIndex);
     }
 
     size--;
-    tree[i] = tree[size - 1];
+    if (size)
+        tree[i] = tree[size - 1];
     adjustGreaterPosition(i);
     return temp;
 }
@@ -114,16 +108,17 @@ int Heap::getGreaterChild(unsigned int index)
     if (index < 0 || index >= size)
         return -1;
 
-    int right = getRightIndex(index);
-    int left = getLeftIndex(index);
+    int right = getRightIndex(index) < (signed)size ? getRightIndex(index) : -1;
+    int left = getLeftIndex(index) < (signed)size ? getLeftIndex(index) : -1;
 
     if (right == -1)
         return left;
 
+    if (left == -1)
+        return right;
+
     int cmp = compare(tree[left], tree[right]);
-    return cmp == 0 ? -1
-                    : cmp > 0 ? left
-                              : right;
+    return cmp > 0 ? left : right;
 }
 
 void Heap::adjustGreaterPosition(unsigned int index)
@@ -133,7 +128,18 @@ void Heap::adjustGreaterPosition(unsigned int index)
 
     for (int i = index, parentIndex; i > 0; i = parentIndex) {
         parentIndex = getParentIndex(i);
-        if (compare(tree[index], tree[parentIndex]) > 0)
-            swap(tree[i], tree[parentIndex]);
+        if (compare(tree[i], tree[parentIndex]) > 0)
+            swap(tree + i, tree + parentIndex);
     }
+}
+
+void Heap::reallocatedTree(unsigned int nodes)
+{
+    allocatedSize = nodes;
+    void** newTree = new void*[nodes];
+    unsigned int upBound = nodes < size ? nodes : size;
+    for (unsigned int i = 0; i < upBound; i++)
+        newTree[i] = tree[i];
+    delete[] tree;
+    tree = newTree;
 }
