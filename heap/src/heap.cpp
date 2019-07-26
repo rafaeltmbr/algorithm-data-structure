@@ -130,6 +130,9 @@ void Heap::adjustGreaterPosition(unsigned int index)
         parentIndex = getParentIndex(i);
         if (compare(tree[i], tree[parentIndex]) > 0)
             swap(tree + i, tree + parentIndex);
+        else
+            break;
+        
     }
 }
 
