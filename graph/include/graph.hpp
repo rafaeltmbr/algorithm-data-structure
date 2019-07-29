@@ -39,7 +39,7 @@ public:
     void* removeVertex(void* data);
     bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(void* fromVertexData, void* toVertexData);
-    List getAdjacencyList(const void* data);
+    const List& getAdjacencyList(const void* data);
     const List& getVertexList(void) { return vertexList; }
     bool isAdjacent(const void* vertex, const void* adjacentVertex);
     bool isVertex(const void* vertex);

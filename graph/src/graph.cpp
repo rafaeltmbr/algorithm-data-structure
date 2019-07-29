@@ -19,7 +19,7 @@ bool GraphVertex::insertEdge(void* data)
 
     ListElement* le = edges.getHead();
     while (le)
-        if (match(data, edges.getData(le)))
+        if (match(data, le->data))
             return false;
 
     edges.insertNext(nullptr, data);
@@ -102,12 +102,30 @@ bool Graph::insertVertex(void* data)
 {
     if (!data || !match)
         return false;
+
+    ListElement* le = vertexList.getHead();
+    while (le)
+        if (match(data, le->data))
+            return false;
+
+    vertexList.insertNext(nullptr, data);
+    return true;
 }
 
 void* Graph::removeVertex(void* data)
 {
     if (!data || !match)
         return nullptr;
+
+    ListElement* prev = nullptr;
+    ListElement* le = vertexList.getHead();
+    while (le) {
+        if (match(data, le->data))
+            return vertexList.removeNext(prev);
+        prev = le;
+        le = le->next;
+    }
+    return nullptr;
 }
 
 bool Graph::insertEdge(void* fromVertexData, void* toVertexData)
@@ -118,7 +136,7 @@ bool Graph::removeEdge(void* fromVertexData, void* toVertexData)
 {
 }
 
-List Graph::getAdjacencyList(const void* data)
+const List& Graph::getAdjacencyList(const void* data)
 {
 }
 
