@@ -16,6 +16,7 @@
 using namespace std;
 
 void testConstructor(List &list);
+void testInsertNextList(List &list);
 void testInsertRemove(List &list);
 void testDestruction(List &list);
 void testElementCheck(List &list);
@@ -26,6 +27,7 @@ int main()
     List list;
     cout << "---------------------- List Testbench ---------------------\n";
     testConstructor(list);
+    testInsertNextList(list);
     testInsertRemove(list);
     testDestruction(list);
     testElementCheck(list);
@@ -56,6 +58,33 @@ void testConstructor(List &list)
     ASSERT(list.getSize() == 0, "getSize() failed");
 
     cout << "Constructor Test PASSED" << endl;
+}
+
+void testInsertNextList(List &list)
+{
+    int i = 10;
+    double d = 2.718;
+    string s = "Hello";
+
+    ASSERT(list.getSize() == 0, "getSize() failed");
+    list.insertNext(nullptr, &i);
+    list.insertNext(nullptr, &d);
+    list.insertNext(nullptr, &s);
+    ASSERT(list.getSize() == 3, "getSize() failed");
+
+    List copy;
+    ASSERT(copy.getSize() == 0, "getSize() failed");
+    copy.insertListNext(nullptr, list);
+    ASSERT(copy.getSize() == 3, "getSize() failed");
+
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+    ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
+
+    ASSERT(copy.removeNext(nullptr) == nullptr, "removeNext() failed");
+    ASSERT(list.getSize() == 0, "getSize() failed");
+
+    cout << "Insert Next List Test PASSED" << endl;
 }
 
 void testInsertRemove(List &list)

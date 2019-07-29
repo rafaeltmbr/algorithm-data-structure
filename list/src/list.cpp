@@ -10,16 +10,17 @@ List::List()
     destroyData = nullptr;
 }
 
-List::List(List &list): List()
+List::List(List& list)
+    : List()
 {
     destroyData = list.destroyData;
-    ListElement *le = list.head;
+    ListElement* le = list.head;
     if (!le)
         return;
 
-    insertNext(nullptr,  le->data);
+    insertNext(nullptr, le->data);
 
-    while(le->next) {
+    while (le->next) {
         insertNext(tail, le->next->data);
         le = le->next;
     }
@@ -35,8 +36,8 @@ void* List::deleteHead(void)
     if (!head)
         return nullptr;
 
-    ListElement *old = head;
-    void *data = old->data;
+    ListElement* old = head;
+    void* data = old->data;
     head = old->next;
     CLEAR_ELEMENT(old);
 
@@ -52,25 +53,25 @@ void* List::deleteHead(void)
 void List::destroy(void)
 {
     if (destroyData) {
-        while(head) {
+        while (head) {
             destroyData(head->data);
             deleteHead();
         }
     } else {
-        while(head)
+        while (head)
             deleteHead();
     }
 }
 
 void List::destroy(destroy_t destroyFunc)
 {
-    while(head) {
+    while (head) {
         destroyFunc(head->data);
         deleteHead();
     }
 }
 
-void List::insertNext(ListElement *element, void *data)
+void List::insertNext(ListElement* element, void* data)
 {
     ListElement* newElement = new ListElement(data);
 
@@ -88,7 +89,7 @@ void List::insertNext(ListElement *element, void *data)
     size++;
 }
 
-void* List::removeNext(ListElement *element)
+void* List::removeNext(ListElement* element)
 {
     if (!element)
         return deleteHead();
@@ -96,8 +97,8 @@ void* List::removeNext(ListElement *element)
     if (!element->next)
         return nullptr;
 
-    ListElement *removedElement = element->next;
-    void *data = removedElement->data;
+    ListElement* removedElement = element->next;
+    void* data = removedElement->data;
     element->next = removedElement->next;
     delete removedElement;
     size--;
@@ -105,4 +106,16 @@ void* List::removeNext(ListElement *element)
     if (element->next == nullptr)
         tail = element;
     return data;
+}
+
+void List::insertListNext(ListElement *element, List& list)
+{
+    destroyData = list.destroyData;
+    ListElement *prev = element;
+    ListElement *le = list.head;
+    while(le) {
+        insertNext(prev, le->data);
+        prev = prev ? prev->next : head;
+        le = le->next;
+    }
 }
