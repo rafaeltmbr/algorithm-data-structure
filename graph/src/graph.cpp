@@ -1,6 +1,6 @@
 #include "../include/graph.hpp"
 
-GraphVertex::GraphVertex(void* data, match_t match = nullptr)
+GraphVertex::GraphVertex(void* data, match_t match)
 {
     this->data = data;
     this->match = match;
@@ -55,7 +55,7 @@ void* GraphVertex::getEdge(void* data)
     return nullptr;
 }
 
-Graph::Graph(match_t match = nullptr, destroy_t destroyFunc = nullptr)
+Graph::Graph(match_t match, destroy_t destroyFunc)
 {
     this->match = match;
     this->destroyFunc = destroyFunc;
@@ -104,8 +104,8 @@ bool Graph::insertVertex(void* data)
         return false;
 
     ListElement* le = vertexList.getHead();
-    while (le)
-        if (match(data, le->data))
+    while (le && le->data)
+        if (match(data, ((GraphVertex*)le->data)->data))
             return false;
 
     vertexList.insertNext(nullptr, data);
@@ -130,20 +130,46 @@ void* Graph::removeVertex(void* data)
 
 bool Graph::insertEdge(void* fromVertexData, void* toVertexData)
 {
+    if (!fromVertexData || !toVertexData || !match)
+        return false;
+
+    GraphVertex *fromVertex = getVertex(fromVertexData);
+    GraphVertex *toVertex = getVertex(toVertexData);
+    if (!fromVertex || !toVertex)
+        return false;
+
+    edgesCount++;
+    fromVertex->insertEdge(toVertexData);
+    return true;
+    
 }
 
 bool Graph::removeEdge(void* fromVertexData, void* toVertexData)
 {
+    return false;
 }
 
-const List& Graph::getAdjacencyList(const void* data)
+const List* Graph::getAdjacencyList(const void* data)
 {
+    return nullptr;
 }
 
 bool Graph::isAdjacent(const void* vertex, const void* adjacentVertex)
 {
+    return false;
 }
 
-bool Graph::isVertex(const void* vertex)
+GraphVertex* Graph::getVertex(const void* data)
 {
+    if (!data || !match)
+        return nullptr;
+ 
+    ListElement *le = vertexList.getHead();
+    while (le && le->data) {
+        if (match(data, ((GraphVertex*)le->data)->data))
+            return (GraphVertex*) le->data;
+        le = le->next;
+    }
+
+    return nullptr;
 }

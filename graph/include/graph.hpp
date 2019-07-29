@@ -9,7 +9,8 @@ class GraphVertex {
 protected:
     void* data;
     List edges;
-
+    friend class Graph;
+    
 public:
     match_t match;
     GraphVertex(void* data, match_t match = nullptr);
@@ -27,6 +28,7 @@ class Graph {
 protected:
     int edgesCount = 0;
     List vertexList;
+    GraphVertex* getVertex(const void* data);
 
 public:
     match_t match;
@@ -39,10 +41,9 @@ public:
     void* removeVertex(void* data);
     bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(void* fromVertexData, void* toVertexData);
-    const List& getAdjacencyList(const void* data);
+    const List* getAdjacencyList(const void* data);
     const List& getVertexList(void) { return vertexList; }
     bool isAdjacent(const void* vertex, const void* adjacentVertex);
-    bool isVertex(const void* vertex);
 };
 
 #endif // GRAPH_HPP
