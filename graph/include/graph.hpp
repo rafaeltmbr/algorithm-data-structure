@@ -10,25 +10,25 @@ protected:
     void* data;
     List edges;
     friend class Graph;
-    
+
 public:
-    match_t match;
-    GraphVertex(void* data, match_t match = nullptr);
-    GraphVertex(GraphVertex& graphVertex);
+    GraphVertex(void* data) { this->data = data; }
+    GraphVertex(GraphVertex& vertex);
     ~GraphVertex(void) { data = nullptr; }
-    bool insertEdge(void* data);
-    void* removeEdge(void* data);
-    int getEdgesCount(void) { return edges.getSize(); }
-    List getEdges(void) { return edges; }
+    bool insertEdge(GraphVertex& vertex);
+    bool removeEdge(GraphVertex& vertex);
+    const List& getEdges(void) { return edges; }
     void* getData(void) { return data; }
-    void* getEdge(void* data);
+    bool isEdge(const GraphVertex& vertex);
 };
 
 class Graph {
 protected:
     int edgesCount = 0;
     List vertexList;
-    GraphVertex* getVertex(const void* data);
+    void deleteVertex(GraphVertex& vertex);
+    void destroyWithCallback(void);
+    void destroyWithoutCallback(void);
 
 public:
     match_t match;
@@ -37,13 +37,14 @@ public:
     Graph(Graph& graph);
     ~Graph(void);
     void destroy(void);
-    bool insertVertex(void* data);
-    void* removeVertex(void* data);
-    bool insertEdge(void* fromVertexData, void* toVertexData);
-    bool removeEdge(void* fromVertexData, void* toVertexData);
-    const List* getAdjacencyList(const void* data);
-    const List& getVertexList(void) { return vertexList; }
-    bool isAdjacent(const void* vertex, const void* adjacentVertex);
+    bool insertVertexByData(void* data);
+    bool removeVertex(GraphVertex& vertex);
+    bool insertEdge(GraphVertex& fromVertex, GraphVertex& toVertex);
+    bool removeEdge(GraphVertex& fromVertex, GraphVertex& toVertex);
+    const List& getVertexList(void) const { return vertexList; }
+    GraphVertex* getVertexByData(const void* data);
+    bool isAdjacent(GraphVertex& fromVertex, GraphVertex& toVertex) {return fromVertex.isEdge(toVertex);}
+    bool isVertex(GraphVertex& vertex);
 };
 
 #endif // GRAPH_HPP
