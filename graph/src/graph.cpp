@@ -2,17 +2,16 @@
 
 bool GraphVertex::insertEdge(void* data)
 {
-    if (!data && edges.hasElementData(data))
+    if (!data && edges.getElementByData(data))
         return false;
     edges.insertNext(nullptr, data);
+    return true;
 }
 
 bool GraphVertex::removeEdge(void* data)
 {
-    if (!)
-
+    return data && edges.removeElementByData(data);
 }
-
 
 void Graph::setMatch(match_t match)
 {

@@ -108,12 +108,12 @@ void* List::removeNext(ListElement* element)
     return data;
 }
 
-void List::insertListNext(ListElement *element, List& list)
+void List::insertListNext(ListElement* element, List& list)
 {
     destroyData = list.destroyData;
-    ListElement *prev = element;
-    ListElement *le = list.head;
-    while(le) {
+    ListElement* prev = element;
+    ListElement* le = list.head;
+    while (le) {
         insertNext(prev, le->data);
         prev = prev ? prev->next : head;
         le = le->next;
@@ -124,7 +124,7 @@ int List::forEach(listCallback_t callbackFunction, void* that)
 {
     int loopCount = 0;
     forEachEnabled = true;
-    for (ListElement *le = head; forEachEnabled && le != nullptr; le = le->next, loopCount++) 
+    for (ListElement* le = head; forEachEnabled && le != nullptr; le = le->next, loopCount++)
         callbackFunction(le->data, that);
     return loopCount;
 }
@@ -132,11 +132,11 @@ int List::forEach(listCallback_t callbackFunction, void* that)
 ListElement* List::getElementByData(const void* data)
 {
     if (match) {
-        for (ListElement *le = head; le != nullptr; le = le->next)
+        for (ListElement* le = head; le != nullptr; le = le->next)
             if (match(data, le->data))
                 return le;
     } else {
-        for (ListElement *le = head; le != nullptr; le = le->next)
+        for (ListElement* le = head; le != nullptr; le = le->next)
             if (data == le->data)
                 return le;
     }
@@ -145,8 +145,27 @@ ListElement* List::getElementByData(const void* data)
 
 bool List::hasListElement(ListElement* element)
 {
-    for (ListElement *le = head; le != nullptr; le = le->next)
+    for (ListElement* le = head; le != nullptr; le = le->next)
         if (element == le)
             return true;
+    return false;
+}
+
+bool List::removeElementByData(const void* data)
+{
+    ListElement *prev = nullptr;
+    if (match) {
+        for (ListElement* le = head; le != nullptr; le = le->next)
+            if (match(data, le->data)) {
+                removeNext(prev);
+                return true;
+            }
+    } else {
+        for (ListElement* le = head; le != nullptr; le = le->next)
+            if (data == le->data) {
+                removeNext(prev);
+                return true;
+            }
+    }
     return false;
 }
