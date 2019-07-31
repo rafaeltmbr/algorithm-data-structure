@@ -119,3 +119,25 @@ void List::insertListNext(ListElement *element, List& list)
         le = le->next;
     }
 }
+
+ListElement* List::hasElementData(const void* data)
+{
+    if (match) {
+        for (ListElement *le = head; le != nullptr; le = le->next)
+            if (match(data, le->data))
+                return le;
+    } else {
+        for (ListElement *le = head; le != nullptr; le = le->next)
+            if (data == le->data)
+                return le;
+    }
+    return nullptr;
+}
+
+bool List::hasListElement(ListElement* element)
+{
+    for (ListElement *le = head; le != nullptr; le = le->next)
+        if (element == le)
+            return true;
+    return false;
+}

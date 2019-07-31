@@ -16,6 +16,7 @@ public:
 };
 
 typedef void (*destroy_t)(void* data);
+typedef bool (*match_t)(const void* data1, const void* data2);
 
 class List {
 protected:
@@ -25,6 +26,7 @@ protected:
     void* deleteHead(void);
 
 public:
+    match_t match = nullptr;
     List();
     List(destroy_t destroyFunc)
         : List()
@@ -46,6 +48,8 @@ public:
     bool isHead(const ListElement* element) const { return head == element; }
     bool isTail(const ListElement* element) const { return tail == element; }
     void insertListNext(ListElement* element, List& list);
+    ListElement* hasElementData(const void* data);
+    bool hasListElement(ListElement* element);
 };
 
 #endif // LIST_HPP
