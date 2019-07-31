@@ -129,7 +129,7 @@ int List::forEach(listCallback_t callbackFunction, void* that)
     return loopCount;
 }
 
-ListElement* List::hasElementData(const void* data)
+ListElement* List::getElementByData(const void* data)
 {
     if (match) {
         for (ListElement *le = head; le != nullptr; le = le->next)

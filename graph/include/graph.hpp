@@ -29,13 +29,7 @@ public:
     Graph(Graph& graph);
     ~Graph(void);
     void destroy(void);
-    void setMatch(match_t match)
-    {
-        vertexList.forEach([](void* vertex) {
-            if (vertex)
-                (*(GraphVertex*)vertex).match = that->match;
-        }, this);
-    }
+    void setMatch(match_t match);
     bool insertVertex(void* vertexData);
     bool removeVertex(void* vertexData);
     bool insertEdge(void* fromVertexData, void* toVertexData);

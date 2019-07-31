@@ -51,7 +51,7 @@ public:
     bool isTail(const ListElement* element) const { return tail == element; }
     void insertListNext(ListElement* element, List& list);
     int forEach(listCallback_t callbackFunction, void* that);
-    ListElement* hasElementData(const void* data);
+    ListElement* getElementByData(const void* data);
     bool hasListElement(ListElement* element);
 };
 
