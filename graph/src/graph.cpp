@@ -6,25 +6,31 @@ GraphVertex::GraphVertex(GraphVertex& vertex)
     edges.insertListNext(nullptr, vertex.edges);
 }
 
-bool GraphVertex::insertEdge(GraphVertex& vertex)
+bool GraphVertex::insertEdge(GraphVertex* vertex)
 {
+    if (!vertex)
+        return false;
+    
     ListElement* le = edges.getHead();
     while (le) {
-        if (&vertex == le->data)
+        if (vertex == le->data)
             return false;
         le = le->next;
     }
 
-    edges.insertNext(nullptr, &vertex);
+    edges.insertNext(nullptr, vertex);
     return true;
 }
 
-bool GraphVertex::removeEdge(GraphVertex& vertex)
+bool GraphVertex::removeEdge(GraphVertex* vertex)
 {
+    if (!vertex)
+        return false;
+    
     ListElement* prev = nullptr;
     ListElement* le = edges.getHead();
     while (le) {
-        if (&vertex == le->data) {
+        if (vertex == le->data) {
             edges.removeNext(prev);
             return true;
         }
@@ -34,11 +40,14 @@ bool GraphVertex::removeEdge(GraphVertex& vertex)
     return false;
 }
 
-bool GraphVertex::isEdge(const GraphVertex& vertex)
+bool GraphVertex::hasEdge(const GraphVertex* vertex)
 {
+    if (!vertex)
+        return false;
+    
     ListElement* le = edges.getHead();
     while (le && le->data) {
-        if (&vertex == le->data)
+        if (vertex == le->data)
             return true;
         le = le->next;
     }
@@ -107,26 +116,55 @@ bool Graph::removeVertex(GraphVertex& vertex)
     return false;
 }
 
+bool Graph::removeVertex(void* data)
+{
+    GraphVertex* vertex = getVertexByData(data);
+    if (!vertex)
+        return false;
+
+    return removeVertex(*vertex);
+}
+
 bool Graph::insertEdge(GraphVertex& fromVertex, GraphVertex& toVertex)
 {
-    if (!isVertex(fromVertex) || !isVertex(toVertex) || fromVertex.isEdge(toVertex))
+    if (!hasVertex(fromVertex) || !hasVertex(toVertex) || fromVertex.hasEdge(&toVertex))
         return false;
 
     edgesCount++;
-    fromVertex.insertEdge(toVertex);
+    fromVertex.insertEdge(&toVertex);
     return true;
+}
+
+bool Graph::insertEdge(void* fromVertexData, void* toVertexData)
+{
+    GraphVertex* fromVertex = getVertexByData(fromVertexData);
+    GraphVertex* toVertex = getVertexByData(toVertexData);
+    if (!fromVertex || !toVertex)
+        return false;
+
+    return insertEdge(*fromVertex, *toVertex);
 }
 
 bool Graph::removeEdge(GraphVertex& fromVertex, GraphVertex& toVertex)
 {
-    if (!isVertex(fromVertex) || !isVertex(toVertex))
+    if (!hasVertex(fromVertex) || !hasVertex(toVertex))
         return false;
 
-    if (fromVertex.removeEdge(toVertex)) {
+    if (fromVertex.removeEdge(&toVertex)) {
         edgesCount--;
         return true;
     }
     return false;
+}
+
+bool Graph::removeEdge(void* fromVertexData, void* toVertexData)
+{
+    GraphVertex* fromVertex = getVertexByData(fromVertexData);
+    GraphVertex* toVertex = getVertexByData(toVertexData);
+    if (!fromVertex || !toVertex)
+        return false;
+
+    return removeEdge(*fromVertex, *toVertex);
 }
 
 GraphVertex* Graph::getVertexByData(const void* data)
@@ -151,7 +189,17 @@ void Graph::deleteVertex(GraphVertex& vertex)
     delete &vertex;
 }
 
-bool Graph::isVertex(GraphVertex& vertex)
+bool Graph::isAdjacent(void* fromVertexData, void* toVertexData)
+{
+    GraphVertex* fromVertex = getVertexByData(fromVertexData);
+    GraphVertex* toVertex = getVertexByData(toVertexData);
+    if (!fromVertex || !toVertex)
+        return false;
+
+    return fromVertex->hasEdge(toVertex);
+}
+
+bool Graph::hasVertex(GraphVertex& vertex)
 {
     ListElement* le = vertexList.getHead();
     while (le) {
@@ -160,6 +208,14 @@ bool Graph::isVertex(GraphVertex& vertex)
         le = le->next;
     }
     return false;
+}
+
+bool Graph::hasVertex(void* data)
+{
+    GraphVertex* vertex = getVertexByData(data);
+    if (!vertex)
+        return false;
+    return hasVertex(*vertex);
 }
 
 void Graph::destroyWithCallback(void)

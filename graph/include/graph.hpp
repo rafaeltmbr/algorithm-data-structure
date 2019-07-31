@@ -15,11 +15,11 @@ public:
     GraphVertex(void* data) { this->data = data; }
     GraphVertex(GraphVertex& vertex);
     ~GraphVertex(void) { data = nullptr; }
-    bool insertEdge(GraphVertex& vertex);
-    bool removeEdge(GraphVertex& vertex);
+    bool insertEdge(GraphVertex* vertex);
+    bool removeEdge(GraphVertex* vertex);
     const List& getEdges(void) { return edges; }
     void* getData(void) { return data; }
-    bool isEdge(const GraphVertex& vertex);
+    bool hasEdge(const GraphVertex* vertex);
 };
 
 class Graph {
@@ -39,14 +39,19 @@ public:
     void destroy(void);
     bool insertVertexByData(void* data);
     bool removeVertex(GraphVertex& vertex);
+    bool removeVertex(void* data);
     bool insertEdge(GraphVertex& fromVertex, GraphVertex& toVertex);
+    bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(GraphVertex& fromVertex, GraphVertex& toVertex);
+    bool removeEdge(void* fromVertexData, void* toVertexData);
     const List& getVertexList(void) const { return vertexList; }
     GraphVertex* getVertexByData(const void* data);
-    bool isAdjacent(GraphVertex& fromVertex, GraphVertex& toVertex) {return fromVertex.isEdge(toVertex);}
-    bool isVertex(GraphVertex& vertex);
-    int getVertexes(void) { return vertexList.getSize(); }
-    int getEdges(void) { return edgesCount; }
+    bool isAdjacent(GraphVertex& fromVertex, GraphVertex& toVertex) { return fromVertex.hasEdge(&toVertex); }
+    bool isAdjacent(void* fromVertexData, void* toVertexData);
+    bool hasVertex(GraphVertex& vertex);
+    bool hasVertex(void* data);
+    int howManyVertexes(void) { return vertexList.getSize(); }
+    int howManyEdges(void) { return edgesCount; }
 };
 
 #endif // GRAPH_HPP
