@@ -45,6 +45,8 @@ public:
     GraphVertex* getVertexByData(const void* data);
     bool isAdjacent(GraphVertex& fromVertex, GraphVertex& toVertex) {return fromVertex.isEdge(toVertex);}
     bool isVertex(GraphVertex& vertex);
+    int getVertexes(void) { return vertexList.getSize(); }
+    int getEdges(void) { return edgesCount; }
 };
 
 #endif // GRAPH_HPP
