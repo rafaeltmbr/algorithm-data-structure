@@ -17,6 +17,7 @@ public:
 
 typedef void (*destroy_t)(void* data);
 typedef bool (*match_t)(const void* data1, const void* data2);
+typedef ListElement* (*listCallback_t)(void* data);
 
 class List {
 protected:
@@ -26,6 +27,7 @@ protected:
     void* deleteHead(void);
 
 public:
+    bool forEachEnabled;
     match_t match = nullptr;
     List();
     List(destroy_t destroyFunc)
@@ -48,6 +50,7 @@ public:
     bool isHead(const ListElement* element) const { return head == element; }
     bool isTail(const ListElement* element) const { return tail == element; }
     void insertListNext(ListElement* element, List& list);
+    int forEach(listCallback_t callbackFunction);
     ListElement* hasElementData(const void* data);
     bool hasListElement(ListElement* element);
 };

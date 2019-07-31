@@ -10,13 +10,13 @@ public:
     match_t match = nullptr;
     void* data = nullptr;
     List edges;
-    
-    GraphVertex() {};
+
+    GraphVertex(){};
     GraphVertex(void* data) { this->data = data; }
     ~GraphVertex(void) { data = nullptr; }
     bool insertEdge(void* data);
     bool removeEdge(void* data);
-    bool hasEdge(const void* data);
+    bool hasEdge(const void* data) { return edges.hasElementData(data); }
 };
 
 class Graph {
@@ -29,11 +29,17 @@ public:
     Graph(Graph& graph);
     ~Graph(void);
     void destroy(void);
+    void setMatch(match_t match){
+        vertexList.forEach([](ListElement* le) {
+            if (le->data)
+                (*(GraphVertex*)le->data)->match = match;
+        })
+    };
     bool insertVertex(void* vertexData);
     bool removeVertex(void* vertexData);
     bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(void* fromVertexData, void* toVertexData);
-    List* getAdjacencyList(void *vertexData);
+    List* getAdjacencyList(void* vertexData);
     bool hasVertex(void* data);
     int howManyVertexes(void) { return vertexList.getSize(); }
     int howManyEdges(void);

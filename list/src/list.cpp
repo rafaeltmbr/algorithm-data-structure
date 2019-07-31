@@ -120,6 +120,15 @@ void List::insertListNext(ListElement *element, List& list)
     }
 }
 
+int List::forEach(listCallback_t callbackFunction)
+{
+    int loopCount = 0;
+    forEachEnabled = true;
+    for (ListElement *le = head; forEachEnabled && le != nullptr; le = le->next, loopCount++) 
+        callbackFunction(le->data);
+    return loopCount;
+}
+
 ListElement* List::hasElementData(const void* data)
 {
     if (match) {
