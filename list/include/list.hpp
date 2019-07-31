@@ -53,7 +53,7 @@ public:
     int forEach(listCallback_t callbackFunction, void* that);
     ListElement* getElementByData(const void* data);
     bool hasListElement(ListElement* element);
-    bool removeElementByData(const void* data);
+    void* removeElementByData(const void* data);
 };
 
 #endif // LIST_HPP

@@ -151,21 +151,17 @@ bool List::hasListElement(ListElement* element)
     return false;
 }
 
-bool List::removeElementByData(const void* data)
+void* List::removeElementByData(const void* data)
 {
     ListElement *prev = nullptr;
     if (match) {
         for (ListElement* le = head; le != nullptr; le = le->next)
-            if (match(data, le->data)) {
-                removeNext(prev);
-                return true;
-            }
+            if (match(data, le->data))
+                return removeNext(prev);
     } else {
         for (ListElement* le = head; le != nullptr; le = le->next)
-            if (data == le->data) {
-                removeNext(prev);
-                return true;
-            }
+            if (data == le->data)
+                return removeNext(prev);
     }
-    return false;
+    return nullptr;
 }
