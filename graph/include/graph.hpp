@@ -19,6 +19,8 @@ public:
 };
 
 class Graph {
+    GraphVertex* getVertexByData(const void* data);
+
 public:
     List vertexList;
     match_t match = nullptr;

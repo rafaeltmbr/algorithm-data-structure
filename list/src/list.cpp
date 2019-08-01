@@ -155,11 +155,11 @@ void* List::removeElementByData(const void* data)
 {
     ListElement *prev = nullptr;
     if (match) {
-        for (ListElement* le = head; le != nullptr; le = le->next)
+        for (ListElement* le = head; le != nullptr; prev = le, le = le->next)
             if (match(data, le->data))
                 return removeNext(prev);
     } else {
-        for (ListElement* le = head; le != nullptr; le = le->next)
+        for (ListElement* le = head; le != nullptr; prev = le, le = le->next)
             if (data == le->data)
                 return removeNext(prev);
     }
