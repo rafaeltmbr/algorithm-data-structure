@@ -7,25 +7,24 @@ typedef bool (*match_t)(const void* data1, const void* data2);
 
 class GraphVertex {
 public:
-    match_t match = nullptr;
     void* data = nullptr;
     List edges;
 
-    GraphVertex(){};
+    GraphVertex();
     GraphVertex(void* data) { this->data = data; }
     ~GraphVertex(void) { data = nullptr; }
     bool insertEdge(void* data);
     bool removeEdge(void* data);
-    bool hasEdge(const void* data) { return edges.hasElementData(data); }
+    bool hasEdge(const void* data) { return edges.getElementByData(data); }
 };
 
 class Graph {
 public:
     List vertexList;
-    match_t match;
-    destroy_t destroyFunc;
+    match_t match = nullptr;
+    destroy_t destroyFunc = nullptr;
 
-    Graph(){};
+    Graph();
     Graph(Graph& graph);
     ~Graph(void);
     void destroy(void);
@@ -35,7 +34,7 @@ public:
     bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(void* fromVertexData, void* toVertexData);
     List* getAdjacencyList(void* vertexData);
-    bool hasVertex(void* data);
+    bool hasVertex(void* vertexData);
     int howManyVertexes(void) { return vertexList.getSize(); }
     int howManyEdges(void);
 };

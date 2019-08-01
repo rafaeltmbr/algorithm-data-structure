@@ -74,7 +74,7 @@ void testInsertNextList(List &list)
 
     List copy;
     ASSERT(copy.getSize() == 0, "getSize() failed");
-    copy.insertListNext(nullptr, list);
+    copy.insertNext(nullptr, list);
     ASSERT(copy.getSize() == 3, "getSize() failed");
 
     ASSERT(list.removeNext(nullptr) == copy.removeNext(nullptr), "removeNext() failed");
