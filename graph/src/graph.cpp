@@ -144,10 +144,30 @@ bool Graph::removeEdge(void* fromVertexData, void* toVertexData)
     return vertex->removeEdge(toVertexData);
 }
 
-List* Graph::getAdjacencyList(void* vertexData)
+bool Graph::getAdjacencyList(void* vertexData, List* list)
 {
     GraphVertex* vertex = getVertexByData(vertexData);
-    return vertex ? &vertex->edges : nullptr;
+    if (!vertex || !list)
+        return false;
+
+    list->insertNext(nullptr, vertex->edges);
+    return true;
+}
+
+bool Graph::getVertexesList(List* list)
+{
+    if (!list)
+        return false;
+
+    static List *l;
+    l = list;
+    vertexList.forEach([](void *data) {
+        GraphVertex *vertex = (GraphVertex*) data;
+        if (!vertex)
+            return;
+        l->insertNext(nullptr, vertex->data);
+    });
+    return true;
 }
 
 bool Graph::hasVertex(void* vertexData)

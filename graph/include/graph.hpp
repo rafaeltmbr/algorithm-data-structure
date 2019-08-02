@@ -20,9 +20,9 @@ public:
 
 class Graph {
     GraphVertex* getVertexByData(const void* data);
+    List vertexList;
 
 public:
-    List vertexList;
     match_t match = nullptr;
     destroy_t destroyFunc = nullptr;
 
@@ -34,7 +34,8 @@ public:
     bool removeVertex(void* vertexData);
     bool insertEdge(void* fromVertexData, void* toVertexData);
     bool removeEdge(void* fromVertexData, void* toVertexData);
-    List* getAdjacencyList(void* vertexData);
+    bool getAdjacencyList(void* vertexData, List* list);
+    bool getVertexesList(List* list);
     bool hasVertex(void* vertexData);
     int howManyVertexes(void) { return vertexList.getSize(); }
     int howManyEdges(void);
