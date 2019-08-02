@@ -4,6 +4,7 @@ bool GraphVertex::insertEdge(void* data)
 {
     if (!data || edges.getElementByData(data))
         return false;
+
     edges.insertNext(nullptr, data);
     return true;
 }
@@ -50,9 +51,22 @@ Graph::Graph()
         GraphVertex& vertex = *(GraphVertex*)data2;
         return *m ? (*m)(data1, vertex.data) : data1 == vertex.data;
     };
+
+    static destroy_t* d = &destroyFunc;
+    static List* l = &vertexList;
+    vertexList.setDestroy([](void *data) {
+        if (!(*d)) {
+            l->forEachEnabled = false;
+            return;
+        }
+
+        GraphVertex* v = (GraphVertex*) data;
+        if (v)
+            (*d)(v->data);
+    });
 }
 
-Graph::Graph(Graph& graph)
+Graph::Graph(Graph& graph): Graph()
 {
     match = graph.match;
     destroyFunc = graph.destroyFunc;
@@ -74,18 +88,7 @@ Graph::~Graph(void)
 
 void Graph::destroy(void)
 {
-    vertexList.setDestroy(destroyFunc);
     vertexList.destroy();
-}
-
-void Graph::setMatch(match_t match)
-{
-    this->match = match;
-    static match_t m = match;
-    vertexList.forEach([](void* vertex) {
-        if (vertex)
-            (*(GraphVertex*)vertex).edges.match = m;
-    });
 }
 
 bool Graph::insertVertex(void* vertexData)
@@ -102,13 +105,24 @@ bool Graph::removeVertex(void* vertexData)
     if (!vertexData)
         return false;
 
-    bool removeFlag = false;
     GraphVertex* vertex = getVertexByData(vertexData);
-    if (vertex) {
-        removeFlag = vertexList.removeElementByData(vertex->data);
-        delete vertex;
-    }
-    return removeFlag;
+    if (!vertex)
+        return false;
+
+    vertexList.removeElementByData(vertex->data);
+    delete vertex;
+
+    static void* d;
+    d = vertexData;
+    vertexList.forEach([](void *data) {
+        GraphVertex *v = (GraphVertex*) data;
+        if (!v)
+            return;
+
+        v->edges.removeElementByData(d);
+    });
+
+    return true;
 }
 
 bool Graph::insertEdge(void* fromVertexData, void* toVertexData)
@@ -117,7 +131,8 @@ bool Graph::insertEdge(void* fromVertexData, void* toVertexData)
     if (!vertex || !getVertexByData(toVertexData))
         return false;
 
-    return vertex->insertEdge(toVertexData);
+    bool same = match ? match(fromVertexData, toVertexData) : fromVertexData == toVertexData;
+    return !same && vertex->insertEdge(toVertexData);
 }
 
 bool Graph::removeEdge(void* fromVertexData, void* toVertexData)
